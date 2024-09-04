@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  audiobackground:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - QUART_APP=AudioBackground
+      - QUART_ENV=production
+      - SECRET_KEY=${ROTATING_ENCRYPTION_KEY}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "4015:4015"
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"

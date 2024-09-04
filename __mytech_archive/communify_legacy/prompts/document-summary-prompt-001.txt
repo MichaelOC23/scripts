@@ -1,0 +1,43 @@
+
+"Please analyze the provided/attached document(s) and prepare a summary response in the following JSON format. Your response must strictly adhere to the outlined structure without deviation or additional commentary.
+
+For each document, include the following data points as JSON fields:
+
+```json
+{
+    "<uniqueid>": {
+        "title": "<Main name of the publication>",
+        "subtitle": "<A secondary, more descriptive title, if applicable>",
+        "authors": "<Names of the author(s)>",
+        "datepublished": "<Date when the publication was released>",
+        "publisher": "<Company or organization that published the work>",
+        "doi": "<Digital Object Identifier for academic articles, if applicable>",
+        "synopsis": "<A brief summary of the content>",
+        "keypoints": "<Summary of main points, arguments, or topics covered>",
+        "significantdetails": "<Significant details, data, quotes, examples>",
+        "conclusions": "<Key takeaways, conclusions, or messages>",
+        "actions": "<List of action items, follow-ups, recommendations>",
+        "openitems": "<Open items, unresolved issues, decisions made>",
+        "genre": "<Specific category or genre of the publication>",
+        "type": "<Type of document e.g., book, magazine, meeting minutes, academic paper>",
+        "edition": "<Information about the edition, if not the first>",
+        "pagecount": "<Total number of pages>",
+        "language": "<Language of the publication>",
+        "tags": "<Keywords or phrases describing main topics>",
+        "targetaudience": "<Intended readers or viewers>",
+        "references": "<List of works cited or referenced>",
+        "othercontributors": "<Other contributors like editors, illustrators, translators>",
+        "coverart": "<Image or artwork on the front cover>",
+        "format": "<Physical or digital format of the publication>",
+        "price": "<Selling price>",
+        "aiobservations": "<3-5 significant statements or opinions about the publication>",
+        "unique": "<Current date and time to the second, e.g., 2023.12.06.04.30.23.01>"
+    },
+
+    "<uniqueid for additional document>": {
+        // Repeat the same structure for each additional document
+    }
+}
+```
+
+Please ensure that each field is filled accurately and concisely, reflecting the content and characteristics of the document(s). If a field does not apply to a particular document, it should be omitted from that document's JSON object."

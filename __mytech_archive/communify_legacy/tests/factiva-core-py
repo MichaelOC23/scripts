@@ -1,0 +1,10 @@
+from factiva.core import dicts
+
+
+countries = dicts.countries_list()
+regions = dicts.regions_hierarchy()
+industries = dicts.industries_hierarchy()
+
+print(countries)
+print(regions)
+print(industries)

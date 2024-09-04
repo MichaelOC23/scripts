@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    build: ./postgres
+    container_name: ListGenPostgres
+    environment:
+      POSTGRES_USER: listgen
+      POSTGRES_PASSWORD: listgen
+      POSTGRES_DB: listgen
+    ports:
+      - "4009:4009"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  flask:
+    build: ./flask
+    container_name: ListGenFlask
+    environment:
+      - DATABASE_URL=postgresql://listgen:listgen@postgres:4009/listgen
+    ports:
+      - "4008:4008"
+    depends_on:
+      - postgres
+
+  streamlit:
+    build: ./streamlit
+    container_name: ListGenApp
+    ports:
+      - "4010:4010"
+    depends_on:
+      - flask
+      - postgres

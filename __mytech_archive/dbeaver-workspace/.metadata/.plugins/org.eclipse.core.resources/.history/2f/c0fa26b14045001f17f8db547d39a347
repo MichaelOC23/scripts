@@ -1,0 +1,7 @@
+
+select from targetlist t where primary_business_name = '*NUT*';
+
+
+select * from targetlist t limit 1;
+
+select * from textlibrary t ;

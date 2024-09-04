@@ -1,0 +1,76 @@
+
+
+
+
+Here are some additional common titles of executives at wealth management firms and broker-dealers who are client-facing:
+Founder
+Chairman
+Chief Executive Officer (CEO)
+Head of Wealth Management
+Head of Private Banking
+Head of Client Services
+Head of Client Relations
+Head of Client Experience
+Head of Client Engagement
+Head of Client Success
+Chief Investment Officer (CIO)
+Chief Financial Officer (CFO)
+President
+Managing Director
+Partner
+Executive Vice President (EVP)
+Chief Strategy Officer (CSO)
+Regional Managing Director
+Principal
+
+
+
+{
+
+"Instructions": 
+    [
+        "Below is an Example_JSON_Data_Record for a contact at at a wealth management firm. Please use the Example_JSON_Data_Record as an example of how to populate the Empty_JSON_Data_Template for the person with the RoleTitle specified in the Empty_JSON_Data_Template.",
+
+        "Use only the information provided with this prompt. Do not use any external sources. If are not able to populate a value, leave it as an empty string.",
+
+        "Return only the Empty_JSON_Data_Template in your response. Do not return any other commentary or text. Your response is being systematically integrated and the assumption is that the Empty_JSON_Data_Template is the only output of your code.",
+
+        "Your response should be in valid JSON format beginning with: {"Contact_JSON_Data": {<The template you populate>} }
+    ],
+
+    "Example_and_Template": {
+        
+        "Example_JSON_Data_Record": {
+            "RoleTitle": "Chief Investment Officer (CIO)",
+            "PersonName": "John Doe",
+            "Company": "XYZ Wealth Management",
+            "Email": "John@xyzwealth.com",
+            "Phone": "555-555-5555",
+            "LinkedIn": "https://www.linkedin.com/in/johndoe"
+            "Background": "John Doe is the Chief Investment Officer at XYZ Wealth Management. He has over 20 years of experience in the financial services industry and specializes in investment management and portfolio construction. John holds a CFA designation and is a graduate of the University of ABC with a degree in Finance. He is passionate about helping clients achieve their financial goals and is committed to providing personalized investment solutions tailored to their needs."
+            "PhotoURLs": ["https://www.xyzwealth.com/johndoe.jpg", "https://www.xyzwealth.com/johndoe2.jpg"],
+            "Location": "New York, NY",
+            "Interests": ["Cars", "Golf", "Travel"],
+            "OtherInfo": ["John is an avid golfer and enjoys spending time with his family and friends.", "He is also a car enthusiast and loves to travel to new destinations."]
+            },
+
+        "Empty_JSON_Data_Template": {
+            "RoleTitle": "Chief Executive Officer (CEO)",
+            "PersonName": ""
+            "Company": "XYZ Wealth Management",
+            "Email": "",
+            "Phone":  "",
+            "LinkedIn":  "",
+            "Background":  "",
+            "PhotoURLs":  ["", ""],
+            "Location":  "",
+            "Interests": ["", "", ""],
+            "OtherInfo": ["", "", ""]
+            }
+
+}
+
+Critical reminder: "Your response should be in valid JSON format beginning with: 
+    {
+    "Contact_JSON_Data": {<The populated template>} 
+    }

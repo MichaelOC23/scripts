@@ -1,0 +1,68 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "favorites.resources": [
+      {
+        "filePath": "docker-compose.yml",
+        "group": "Default"
+      },
+      {
+        "filePath": "000_mytech_quart.py",
+        "group": "Default"
+      },
+      {
+        "filePath": "000_MyTech.py",
+        "group": "Default"
+      },
+      {
+        "filePath": "_class_streamlit_header.py",
+        "group": "Default"
+      },
+      {
+        "filePath": "_class_streamlit.py",
+        "group": "Default"
+      },
+      {
+        "filePath": ".postgres/Dockerfile",
+        "group": "Default"
+      },
+      {
+        "filePath": "_00_script_admin.sh",
+        "group": "Default"
+      },
+      {
+        "filePath": "env_variables.sh",
+        "group": "Default"
+      },
+      {
+        "filePath": "menu.sh",
+        "group": "Default"
+      },
+      {
+        "filePath": "00_script_admin.sh",
+        "group": "Default"
+      },
+      {
+        "filePath": "00_scripts_admin.sh",
+        "group": "Default"
+      },
+      {
+        "filePath": ".vscode/launch.json",
+        "group": "Default"
+      },
+      {
+        "filePath": "_class_list_generation.py",
+        "group": "Default"
+      },
+      {
+        "filePath": "navigation.py",
+        "group": "Default"
+      }
+    ],
+    "favorites.sortOrder": "ASC"
+  }
+}

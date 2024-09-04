@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="DBeaver.DriverTabbedViewer">
+	</section>
+	<section name="DBeaver.ActiveWizardDialog.NewConnectionWizard">
+		<item key="DIALOG_X_ORIGIN" value="222"/>
+		<item key="DIALOG_Y_ORIGIN" value="-15"/>
+		<item key="DIALOG_WIDTH" value="814"/>
+		<item key="DIALOG_HEIGHT" value="690"/>
+		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|13.0|0|COCOA|1|.AppleSystemUIFont"/>
+	</section>
+	<section name="DBeaver.ShowTipOfTheDayDialog">
+		<item key="DIALOG_X_ORIGIN" value="368"/>
+		<item key="DIALOG_Y_ORIGIN" value="201"/>
+		<item key="DIALOG_WIDTH" value="398"/>
+		<item key="DIALOG_HEIGHT" value="251"/>
+		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|13.0|0|COCOA|1|.AppleSystemUIFont"/>
+	</section>
+	<section name="DriverDownload">
+	</section>
+	<section name="DBeaver.DriverDownloadDialog">
+		<item key="DIALOG_X_ORIGIN" value="68"/>
+		<item key="DIALOG_Y_ORIGIN" value="30"/>
+		<item key="DIALOG_WIDTH" value="679"/>
+		<item key="DIALOG_HEIGHT" value="521"/>
+		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|13.0|0|COCOA|1|.AppleSystemUIFont"/>
+	</section>
+	<section name="ResultSetViewer">
+		<section name="presentations">
+			<section name="spreadsheet">
+				<item key="enabledPanelIds" value="value-view"/>
+				<item key="activePanelId" value="value-view"/>
+				<item key="panelRatio" value="300"/>
+				<item key="panelsVisible" value="false"/>
+				<item key="verticalLayout" value="false"/>
+			</section>
+		</section>
+	</section>
+	<section name="DBeaver.QM.LogViewer">
+	</section>
+	<section name="DBeaver.EditConnectionDialog">
+		<item key="DIALOG_X_ORIGIN" value="217"/>
+		<item key="DIALOG_Y_ORIGIN" value="-43"/>
+		<item key="DIALOG_WIDTH" value="1049"/>
+		<item key="DIALOG_HEIGHT" value="662"/>
+		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|13.0|0|COCOA|1|.AppleSystemUIFont"/>
+	</section>
+	<section name="DBeaver.StandardErrorDialog">
+		<item key="showDetails" value="false"/>
+		<item key="DIALOG_X_ORIGIN" value="379"/>
+		<item key="DIALOG_Y_ORIGIN" value="216"/>
+		<item key="DIALOG_WIDTH" value="376"/>
+		<item key="DIALOG_HEIGHT" value="228"/>
+		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|13.0|0|COCOA|1|.AppleSystemUIFont"/>
+	</section>
+	<section name="DBeaver.SelectDataSourceDialog">
+		<item key="DIALOG_X_ORIGIN" value="608"/>
+		<item key="DIALOG_Y_ORIGIN" value="0"/>
+		<item key="DIALOG_WIDTH" value="296"/>
+		<item key="DIALOG_HEIGHT" value="691"/>
+		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|13.0|0|COCOA|1|.AppleSystemUIFont"/>
+	</section>
+	<section name="DBeaver.ViewSQLDialog">
+		<item key="DIALOG_X_ORIGIN" value="492"/>
+		<item key="DIALOG_Y_ORIGIN" value="106"/>
+		<item key="DIALOG_WIDTH" value="528"/>
+		<item key="DIALOG_HEIGHT" value="516"/>
+		<item key="DIALOG_FONT_NAME" value="1|.AppleSystemUIFont|13.0|0|COCOA|1|.AppleSystemUIFont"/>
+	</section>
+</section>

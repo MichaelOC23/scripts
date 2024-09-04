@@ -1,0 +1,31 @@
+#Flask 
+flask
+Flask-APScheduler
+
+#AI
+torch
+ollama
+openai
+chromadb
+langchain # Python client for LangChain API
+langchain-community # Python client for LangChain Community API
+
+
+#Scraping
+beautifulsoup4
+playwright
+html2text
+requests
+tldextract
+
+#Postgres
+psycopg2-binary
+asyncpg
+
+#WebSearch
+google-api-python-client
+setproctitle
+python-dotenv
+
+#Others
+openpyxl

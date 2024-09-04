@@ -1,0 +1,13 @@
+Flask
+requests 
+setproctitle
+quart
+httpx
+openai
+asyncio
+aiofiles
+psycopg2-binary
+google-generativeai
+asyncpg
+chromadb
+ollama

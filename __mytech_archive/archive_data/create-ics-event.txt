@@ -1,0 +1,69 @@
+Transform the following events into an ICS file text. Please follow ALL of the instructions below
+-Dates may be listed before descriptions or times. 
+-If no events are detectable, respond with a single all day event for today. 
+-Do not add commentary, only provide the ICS file text. 
+-The current date and time is  Current Date , which you should use to translate relative dates (like "tomorrow"). 
+-Make sure to use the UTC time (With the Z) in the ICS file. If you find a time that has no time zone designation, assume it is Pacific Standard Time
+
+Also not the following abbreviations:
+-MWF: Monday, Wednesday and Friday
+TTH:  Tuesday, Thursday
+-M-F: Monday, Tuesday, Wednesday, Thursday, Friday
+- Mon, Tues, Wed, Thu, Fri, Sat, Sun are abbreviations for each of the 7 days of the week beginning with Monday respectively. 
+- If an event is “the week of [x date] the date should be a Monday. 
+- If you find a start time for an event but no end time or duration, assume the event is 1 hour in duration 
+
+Common Time Zone abbreviations
+
+1. **Eastern Time Zone (ET)**
+   - **EST** (Eastern Standard Time) - UTC-5: Used during Standard Time
+   - **EDT** (Eastern Daylight Time) - UTC-4: Used during Daylight Saving Time
+
+2. **Central Time Zone (CT)**
+   - **CST** (Central Standard Time) - UTC-6: Used during Standard Time
+   - **CDT** (Central Daylight Time) - UTC-5: Used during Daylight Saving Time
+
+3. **Mountain Time Zone (MT)**
+   - **MST** (Mountain Standard Time) - UTC-7: Used during Standard Time
+   - **MDT** (Mountain Daylight Time) - UTC-6: Used during Daylight Saving Time
+
+4. **Pacific Time Zone (PT)**
+   - **PST** (Pacific Standard Time) - UTC-8: Used during Standard Time
+   - **PDT** (Pacific Daylight Time) - UTC-7: Used during Daylight Saving Time
+
+5. **Alaska Time Zone**
+   - **AKST** (Alaska Standard Time) - UTC-9: Used during Standard Time
+   - **AKDT** (Alaska Daylight Time) - UTC-8: Used during Daylight Saving Time
+
+6. **Hawaii-Aleutian Time Zone**
+   - **HAST** (Hawaii-Aleutian Standard Time) - UTC-10: Used throughout the year in Hawaii as they don't observe Daylight Saving Time.
+   - **HADT** (Hawaii-Aleutian Daylight Time) - Rarely used since Hawaii doesn't observe DST, but parts of the Aleutian Islands that did would use this.
+
+7. **London (UK) Time Zone**
+   - **GMT** (Greenwich Mean Time) - UTC+0: Used during Standard Time.
+   - **BST** (British Summer Time) - UTC+1: Used during Daylight Saving Time.
+
+8. **Singapore Time Zone**
+   - **SGT** (Singapore Time) - UTC+8: Singapore does not observe Daylight Saving Time, so this is the consistent time zone offset throughout the year.
+
+9. **Hong Kong Time Zone**
+   - **HKT** (Hong Kong Time) - UTC+8: Similar to Singapore, Hong Kong does not observe Daylight Saving Time, maintaining a consistent time zone offset all year round.
+
+An example of the response you need to provide is below
+
+BEGIN:VCALENDAR
+VERSION:3.0
+PRODID:-//ChatGPT//EN
+BEGIN:VEVENT
+UID:20230905T101300Z-00001@chatgpt
+DTSTAMP:20230905T101300Z
+DTSTART:20230906T141000
+DTEND:20230906T150000
+SUMMARY:Lunch with friends
+DESCRIPTION:Weekly lunch with friends
+END:VEVENT
+END:VCALENDAR
+
+Again, do NOT provide any commentary, only provide the ICS file text. Your response will be systematically integrated.
+
+

@@ -1,0 +1,54 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Quart",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/AudioBackground.py",
+      "console": "integratedTerminal",
+      "env": {
+        "QUART_APP": "quart-app",
+        "QUART_ENV": "development",
+        "API_KEY": "${env:DEEPGRAM_API_KEY}",
+        "LOG_FOLDER": "logs"
+      },
+      "args": [
+        "run",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "5000"
+      ],
+      "justMyCode": false
+    },
+    {
+      "name": "THIS:Streamlit",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "streamlit",
+      "args": [
+        "run",
+        "${file}"
+      ],
+      "justMyCode": true,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Attach to Quart",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 5678
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}",
+          "remoteRoot": "/app"
+        }
+      ],
+      "justMyCode": false
+    }
+  ]
+}

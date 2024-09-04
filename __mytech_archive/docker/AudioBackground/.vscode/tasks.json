@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "installDependencies",
+      "type": "shell",
+      "command": "${workspaceFolder}/AudioBackground_venv/bin/pip",
+      "args": ["install", "-r", "requirements.AudioBackground.txt"],
+      "problemMatcher": []
+    }
+  ]
+}

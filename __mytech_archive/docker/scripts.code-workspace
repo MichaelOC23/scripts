@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "path": "Utils/scripts"
+    }
+  ],
+  "settings": {
+    "favorites.resources": [
+      {
+        "filePath": "_class_logger.py",
+        "group": "Default"
+      }
+    ]
+  }
+}

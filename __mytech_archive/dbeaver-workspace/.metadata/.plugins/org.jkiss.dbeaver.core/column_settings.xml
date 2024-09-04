@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+	<item id="NodeList/DBNResource">
+		<column name="Name" visible="true" order="0" width="100"/>
+		<column name="Path" visible="true" order="1" width="163"/>
+		<column name="Size" visible="true" order="2" width="100"/>
+		<column name="Last modified" visible="true" order="3" width="158"/>
+	</item>
+	<item id="NodeList/PostgreTableColumn">
+		<column name="Column Name" visible="true" order="0" width="240"/>
+		<column name="#" visible="true" order="1" width="100"/>
+		<column name="Data type" visible="true" order="2" width="100"/>
+		<column name="Identity" visible="true" order="3" width="100"/>
+		<column name="Collation" visible="true" order="4" width="100"/>
+		<column name="Not Null" visible="true" order="5" width="100"/>
+		<column name="Default" visible="true" order="6" width="145"/>
+		<column name="Comment" visible="true" order="7" width="100"/>
+	</item>
+	<item id="SQLToolStatus.pgToolTableAnalyze">
+		<column name="Object name" visible="true" order="0" width="136"/>
+		<column name="Message" visible="true" order="1" width="557"/>
+		<column name="Execution time" visible="true" order="2" width="155"/>
+	</item>
+	<item id="Suggestion/NodeList/PostgreTableColumn">
+		<column name="Column Name" visible="true" order="0" width="155"/>
+		<column name="#" visible="true" order="1" width="19"/>
+		<column name="Data type" visible="true" order="2" width="83"/>
+		<column name="Identity" visible="true" order="3" width="49"/>
+		<column name="Collation" visible="false" order="4" width="100"/>
+		<column name="Not Null" visible="false" order="5" width="100"/>
+		<column name="Default" visible="false" order="6" width="145"/>
+		<column name="Comment" visible="true" order="4" width="62"/>
+	</item>
+</items>
