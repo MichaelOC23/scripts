@@ -9,12 +9,12 @@ PLATFORM_PATH="${CODE_PATH}/platform"
 FRONTEND_PATH="${CODE_PATH}/frontend"
 
 # Scripts Paths
-SCRIPT_PATH="${CODE_PATH}/mytech/docker/Utils/scripts"
+SCRIPT_PATH="${CODE_PATH}/scripts"
 SCRIPT_VENV_PATH="${SCRIPT_PATH}/scripts_venv/bin/activate"
 SCRIPT_PYTHON_PATH="${SCRIPT_PATH}/scripts_venv/bin/python"
 
 #ListGen Paths
-LISTGEN_PATH="${CODE_PATH}/mytech/docker/ListGen/"
+LISTGEN_PATH="${CODE_PATH}/listgen/"
 LISTGEN_VENV_PATH="${LISTGEN_PATH}/listgen_venv/bin/activate"
 
 #Transcription Paths
