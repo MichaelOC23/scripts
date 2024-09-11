@@ -956,33 +956,57 @@ if __name__ == '__main__':
 
         
         def firmList():
-            if st.button("Download Firm List"):
+            if st.button("Show me the $$$"):
                 csvpg = CSVToPostgres()
-                df_base = csvpg.execute_select_query("""SELECT * from datagen.iaadvbasea2024010120240331""")
-                df1 = csvpg.execute_select_query("""SELECT * from datagen.iascheduleab2024010120240331""")
-                df2 = csvpg.execute_select_query("""SELECT * from datagen.iascheduled1i2024010120240331""")
-                df3 = csvpg.execute_select_query("""SELECT * from datagen.iascheduled7b1a28websites2024010120240331""")
-                df_merged = pd.merge(df_base, df1, on='cfilingid', how='left')
-                df_merged = pd.merge(df_merged, df2, on='cfilingid', how='left')
-                df_merged = pd.merge(df_merged, df3, on='cfilingid', how='left')
+                # iascheduled7a2024010120240331
+                df_merged = csvpg.execute_select_query("""SELECT * from datagen.iaadvbasea2024010120240331""")
+                # # df_0 = csvpg.execute_select_query("""SELECT * from datagen.iaadvbasea2024010120240331""")
+                # # df_merged = pd.merge(df_0, df_base, on='cfilingid', how='left')
+                
+                # # Get all dem data frames
+                # df1 = csvpg.execute_select_query("""SELECT i.cfilingid, i.cfulllegalname || '; ' || i.ctitleorstatus as pers FROM datagen.iascheduleab2024010120240331 i WHERE i.cdefei = 'I';""")
+                # df1 = df1.groupby('cfilingid')['pers'].agg(', '.join).reset_index()
+                # df_merged = pd.merge(df_base, df1, on='cfilingid', how='left')
+                
+  
+                
+                # return
+                # df2 = csvpg.execute_select_query("""SELECT * from datagen.iascheduled1i2024010120240331""")
+                # df3 = csvpg.execute_select_query("""SELECT * from datagen.iascheduled7b1a28websites2024010120240331""")
+                
+                # #df1
+                # df_merged = pd.merge(df_base, df_0, on='cfilingid', how='left')
+                
+                
+                
+                
+                
+                # df_merged = pd.merge(df_merged, df2, on='cfilingid', how='left')
+                # df_merged = pd.merge(df_merged, df3, on='cfilingid', how='left')
 
                 
+                
+                
+                
                 r_dict = {}
-                for k in column_name_dict:
-                    r_dict[csvpg.clean_str(column_name_dict[k])] = k
+                for k in column_name_dict.keys():
+                    r_dict[k.lower()]=column_name_dict[k]
+
+                df_merged.drop_duplicates()
+                df_merged = df_merged.rename(columns=r_dict)
+                df_merged.to_csv('merged.csv', index=False)
                 
-                df_merged_renamed = df_merged.rename(columns=r_dict)
-                df_merged_renamed.drop_duplicates()
-                
-                df_merged_renamed.to_csv('merged.csv', index=False)
+                pg_table_grid = create_new_grid(enablePivot=False)
+                pg_table_grid.display_grid(df_merged)
                 print('done')
 
        
        
        
         nav_dict= {
-            "Registered Investment Advisors": [
-            st.Page(page=firmList, title="Firm List"),    
+            "Awesome US Target Lists": [
+            st.Page(page=firmList, title="Why did you click here?", url_path='home'),    
+            st.Page(page=firmList, title="US List", url_path='for_noelle_and_sarah_and_uhhhh_maybe_barb'),    
             ],
             "Filings": [],
             "Metadata": [
@@ -991,7 +1015,7 @@ if __name__ == '__main__':
             st.Page(page=meta3, title=meta3_t),
             st.Page(page=meta5, title=meta5_t),
             ]
-        }
+            }
         
         def define_function_from_string(table_name='', title=''):
             # Define the function code as a string
@@ -1005,7 +1029,7 @@ def func{table_name}():
     if '{table_name}' in st.session_state:
         df = st.session_state['{table_name}']
         pg_table_grid.display_grid(df)
-    elif st.button('{title}'):
+    elif st.button('Show me the data: {title}'):
         sql = f"Select * from datagen.{table_name}"
         st.write (sql)
         df = csvpg.execute_select_query(sql)

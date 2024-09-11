@@ -119,7 +119,7 @@ class streamlit_mytech():
                     logo_url=None, 
                     session_state_variables=[], 
                     connect_to_dj=False, 
-                    hideResultGridButton=False):  
+                    hideResultGridButton=False, initial_sidebar_state="expanded"):  
         
         
         def initialize_session_state_variable(variable_name, variable_value):
@@ -137,7 +137,7 @@ class streamlit_mytech():
                     initialize_session_state_variable(key, variable[key])
             
         st.set_page_config(
-                page_title=self.page_title, page_icon=":earth_americas:", layout="wide", initial_sidebar_state="collapsed",
+                page_title=self.page_title, page_icon=":earth_americas:", layout="wide", initial_sidebar_state=initial_sidebar_state,
                 menu_items={'Get Help': 'mailto:michael@communify.com','Report a bug': 'mailto:michael@communify.com',})    
         
         self.set_theme()
