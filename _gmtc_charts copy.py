@@ -452,7 +452,7 @@ class create_new_grid():
 
 if __name__ == '__main__':
     def main():
-        gmtc = gmtc_data()
+         = gmtc_data()
         
         # #Holdings data prep
         # gmtc.account_holdings['marketvalue'] = pd.to_numeric(gmtc.account_holdings['marketvalue'], errors='coerce')

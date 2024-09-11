@@ -61,6 +61,10 @@
       {
         "filePath": "navigation.py",
         "group": "Default"
+      },
+      {
+        "filePath": "_88_merge_sec_csvs.py",
+        "group": "Default"
       }
     ],
     "favorites.sortOrder": "ASC"

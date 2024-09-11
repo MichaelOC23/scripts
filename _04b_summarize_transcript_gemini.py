@@ -8,8 +8,8 @@ import json
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 
-TEST_VALUE = "/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes by Michael/Transcriptions/.trans_json/TLC final follow up questions..m4a.json"
-TEST_SUMMARY_PATH = "/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes by Michael/Transcriptions/24.08.05/24.08.05.TLC final follow up questions. .104min.0sec.md"
+TEST_VALUE = "/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes By Michael/Transcriptions/24.09.09"
+TEST_SUMMARY_PATH = "/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes by Michael/Transcriptions"
 
 print(f"{sys.argv}")
 

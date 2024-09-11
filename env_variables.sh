@@ -30,7 +30,8 @@ export SCRIPTS_PATH="${HOME}/code/scripts"
 export NOTES_PATH="${HOME}/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Notes\ by\ Michael"
 
 # Capture and print the current time:
-export ENV_VAR_LOAD_DATE_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+ENV_VAR_LOAD_DATE_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+export ENV_VAR_LOAD_DATE_TIME
 export PGPORT=4999
 
 # Run commands for the platform and frontend for Communify
@@ -40,8 +41,10 @@ alias add_spacer="defaults write com.apple.dock persistent-apps -array-add '{\"t
 alias source_env='(source ~/code/scripts/env_variables.sh)'
 alias source_scripts="source /Users/michasmi/code/scripts/scripts_venv/bin/activate "
 alias run_openwebui='docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main'
-alias cd_scripts="cd ${SCRIPTS_PATH}"
-alias cd_notes="cd ${NOTES_PATH}"
+CDS="cd ${SCRIPTS_PATH}"
+alias cd_scripts="${CDS}"
+CDN="cd ${NOTES_PATH}"
+alias cd_notes="${CDN}"
 alias start_docker="docker run --name my_postgres_container \
   -e ALLOW_EMPTY_PASSWORD=yes \
   -e POSTGRES_USER=myuser \

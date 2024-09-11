@@ -7,8 +7,6 @@ def show_authenticated_menu():
     # with st.sidebar:
     #     st.text("Navigation")
         # st.page_link("pages/000_gmtc_charts.py", label="GMTC Chart Design Area")
-        
-    
     # st.switch_page("pages/000_gmtc_charts.py")
 
 def check_session_state():

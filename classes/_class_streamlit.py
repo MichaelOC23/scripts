@@ -45,6 +45,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from decimal import Decimal
 
+
 #Office Documents
 # from langchain_community.document_loaders import UnstructuredWordDocumentLoader
 # from langchain.document_loaders import UnstructuredPowerPointLoader, pdf, text, url
@@ -84,10 +85,12 @@ class streamlit_mytech():
         # Step 1: Load the existing config.toml file
         # use pathlib to get the directory of user's home directory
         home_dir = Path.home()
-        config_file_path = f'{home_dir}/.streamlit/config.toml'
+        home_config_file_path = f'{home_dir}/.streamlit/config.toml'
+        working_config_file_path = f'.streamlit/config.toml'
+        master_config_file_path = '/Users/michasmi/code/scripts/.streamlit/master_streamlit_config.toml'
         
-        if os.path.exists(config_file_path):
-            with open(config_file_path, 'r') as file:
+        if os.path.exists(master_config_file_path):
+            with open(master_config_file_path, 'r') as file:
                 config_data = toml.load(file)
         else:
             config_data = {}
@@ -107,7 +110,9 @@ class streamlit_mytech():
             config_data[setting[0]][setting[1]] = setting[2]
     
         # Step 3: Write the changes back to the config.toml file
-        with open(config_file_path, 'w') as file:
+        with open(home_config_file_path, 'w') as file:
+            toml.dump(config_data, file)    
+        with open(working_config_file_path, 'w') as file:
             toml.dump(config_data, file)    
         
     def set_up_page(self, page_title_text=None, 
@@ -160,22 +165,23 @@ class streamlit_mytech():
         
         # 
         st.logo(self.logo_icon_url, icon_image=self.logo_url)
+        st.header(f"{self.page_title}",divider='blue')
         
         
-        #View Session State Button
-        view_ss = st.sidebar.button(f"Ses. State", use_container_width=True)
-        if view_ss:
-            if st.session_state.show_session_state:
-                st.session_state.show_session_state = False
-            else:
-                st.session_state.show_session_state = True
+        # #View Session State Button
+        # view_ss = st.sidebar.button(f"Ses. State", use_container_width=True)
+        # if view_ss:
+        #     if st.session_state.show_session_state:
+        #         st.session_state.show_session_state = False
+        #     else:
+        #         st.session_state.show_session_state = True
 
-        log_exp = st.expander("Extraction Log", expanded=False)
+        # log_exp = st.expander("Extraction Log", expanded=False)
         
-        # Display the session state
-        if st.session_state.show_session_state:
-            ss = st.expander("Session State Value", expanded=False)
-            ss.write(st.session_state)
+        # # Display the session state
+        # if st.session_state.show_session_state:
+        #     ss = st.expander("Session State Value", expanded=False)
+        #     ss.write(st.session_state)
         
         
         # Enable the below to see border around the page and all the columns

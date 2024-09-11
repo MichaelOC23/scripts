@@ -1,0 +1,18 @@
+{
+    "tsch_d_5k1_2023_ready.csv": {
+        "ccfilingid": true
+    },
+    "tsch_d_1i_2023_ready.csv": {},
+    "tia_adv_base_a_2023_ready.csv": {
+        "ccfilingid": true
+    },
+    "ttsch_d_5k1_2023_ready_ready.csv": {
+        "cccfilingid": true
+    },
+    "ttsch_d_1i_2023_ready_ready.csv": {},
+    "ttia_adv_base_a_2023_ready_ready.csv": {
+        "cccfilingid": true
+    },
+    "tsch_d_7b1a25_2023_ready.csv": {},
+    "ttsch_d_7b1a25_2023_ready_ready.csv": {}
+}

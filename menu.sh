@@ -67,6 +67,7 @@ show_menu() {
     echo -e "${MAGENTA} 8) Transcribe new Voicememos ${NC}"
     echo -e "${MAGENTA} 9) Kill all Python processes ${NC}"
     echo -e "${MAGENTA}10) Find duplicate folders (recursive)${NC} <start dir> or current dir${NC}"
+    echo -e "${MAGENTA}11) Stop-Restart Postgres ${NC}"
     echo -e "${MAGENTA}XX) Review transcriptions  ${NC}"
     echo -e "${MAGENTA}XX) Copy files by type (recursive)${NC} <.XXX> <from dir> <to dir> ${NC}"
     echo -e "${MAGENTA}XX) Generate simple file list (recursive)${NC} <start dir> ${NC}"
@@ -163,7 +164,14 @@ read_choice() {
         exit 0
         ;;
 
-    100)
+    11)
+        echo "Restarting Postgres 14"
+        brew services restart postgresql@14
+        echo "Postgres 14 restarted"
+        exit 0
+        ;;
+
+    901)
         echo -e "Removing and recreating the virtual environment ..."
         venv_rm_and_recreate
         exit 0
@@ -190,11 +198,7 @@ read_choice() {
         fi
         exit 0
         ;;
-    903)
-        echo -e "AudioBackground and Meeting Tech Admin Tools"
-        "${EXECUTE_AUDIOBACKGROUND_ADMIN}"
-        exit 0
-        ;;
+
     904)
         echo "Examples of Font Colors in Bash"
         echo -e "${BLACK}The Quick Brown Fox Jumped Over the Lazy Dog ${NC}"
@@ -221,12 +225,7 @@ read_choice() {
         echo "Terminal access to iCloud Drive granted"
         exit 0
         ;;
-    906)
-        echo "Restarting Postgres 14"
-        brew services restart postgresql@14
-        echo "Postgres 14 restarted"
-        exit 0
-        ;;
+
     907)
         echo "Start / Restart LLMs and Chat Apps"
         cd "${COMMUNIFY_PATH}" && llm_launch.sh
@@ -315,9 +314,9 @@ start_listgen_venv() {
     echo -e "Python Virtual Environment started."
 }
 
-commit_mytech() {
+commit_mytech() { 
     echo -e "Committing and pushing MyTech ..."
-    cd "${HOME}/code/mytech" || {echo "Error: '${HOME}/code/mytech' directory not found." exit 1}
+    cd "${HOME}/code/mytech" || {echo "Error: '${HOME}/code/mytech' directory not found." exit 1
     commit_current_folder
     cd "${HOME}"
     echo -e "Complete and pushed of MyTech is complete."

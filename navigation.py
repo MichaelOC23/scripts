@@ -5,7 +5,7 @@ import pathlib
 
 class _navigation:
     def __init__(self):
-        self.folder_name = "pages"
+        self.folder_name = "pages_nav"
         self.start_folder = f"{os.getcwd()}/{self.folder_name}"
         self.folder_structure = self.get_folder_structure(self.start_folder)
         self.menu = None
@@ -39,21 +39,22 @@ class _navigation:
                 file_path = f"{sub_folder_path}/{file}"
                 
                 # Check if it's a file (not a directory)
-                if file.endswith(".py"):
-                    #get the file number
-                    num = num_seed
-                    if file[:1].isdigit(): num = int(file[:1])
-                    if file[:2].isdigit(): num = int(file[:2])
-                    if file[:3].isdigit(): num = int(file[:3])
-                    
-                    if num == num_seed:
-                        num_seed += 1
-                    
-                    
-                    while num in used_numbers:
-                        num += 1
-                    
-                    used_numbers.append(num)
+                if not file.endswith(".py"):
+                    continue
+                #get the file number
+                num = num_seed
+                if file[:1].isdigit(): num = int(file[:1])
+                if file[:2].isdigit(): num = int(file[:2])
+                if file[:3].isdigit(): num = int(file[:3])
+                
+                if num == num_seed:
+                    num_seed += 1
+                
+                
+                while num in used_numbers:
+                    num += 1
+                
+                used_numbers.append(num)
                     
                 folder_structure[sub_folder][num] = {'name': self.format_menu_name(file).strip(), "num": num, "path": file_path}
 

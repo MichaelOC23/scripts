@@ -61,7 +61,6 @@ sympy
 tqdm
 dataclasses
 dataclasses-json
-chardet
 # ydata-profiling
 # seaborn
 

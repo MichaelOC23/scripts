@@ -1,5 +1,5 @@
 [global]
-showWarningOnDirectExecution = false
+showWarningOnDirectExecution = true
 
 [logger]
 level = "info"
@@ -17,14 +17,17 @@ enforceSerializableSessionState = false
 enumCoercion = "nameOnly"
 
 [server]
+folderWatchBlacklist = []
+cookieSecret = "a-random-key-appears-here"
 headless = true
 runOnSave = true
-enableCORS = false
+port = 5010
+enableCORS = true
 enableXsrfProtection = true
 maxUploadSize = 1000
 maxMessageSize = 1000
-enableWebsocketCompression = true
-enableStaticServing = true
+enableWebsocketCompression = false
+enableStaticServing = false
 
 [browser]
 serverAddress = "localhost"
@@ -34,5 +37,6 @@ gatherUsageStats = false
 font = "sans serif"
 primaryColor = "#003366"
 backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#19191A"
-textColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F2F6"
+textColor = "#003366"
+base = "light"

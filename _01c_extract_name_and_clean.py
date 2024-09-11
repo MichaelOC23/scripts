@@ -890,7 +890,7 @@ flexGrow=.5
     
         
 if __name__ == "__main__":
-    test_folder = "/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes By Michael/mess/intro/"
-    extractor = TextExtractor(test_folder_path=test_folder, force_rerun=True,)
+    test_folder = "/Users/michasmi/Downloads/Goldmine/PDFFiles/"
+    extractor = TextExtractor(test_folder_path=test_folder, force_rerun=False,)
     asyncio.run(extractor.init_extractor())
          
