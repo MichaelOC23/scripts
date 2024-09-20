@@ -96,7 +96,8 @@ option1() {
     ln -s ${HOME}/code/mytech/docker/Utils ~/${UTIL_SLINK}
 
     # Define the content to be added
-    CONTENT=$(cat << 'EOF'
+    CONTENT=$(
+        cat <<'EOF'
 # Your multi-line content here
 
 UTILS_PATH="${HOME}/code/mytech/docker/Utils"
@@ -137,12 +138,12 @@ EOF
     done
 
     # Append the content to .zshrc and .zprofile
-    echo "$CONTENT" >> ~/.zshrc
-    echo "$CONTENT" >> ~/.zprofile
+    echo "$CONTENT" >>~/.zshrc
+    echo "$CONTENT" >>~/.zprofile
 
     # Append the content to .bashrc and .bash_profile
-    echo "$CONTENT" >> ~/.bashrc
-    echo "$CONTENT" >> ~/.bash_profile
+    echo "$CONTENT" >>~/.bashrc
+    echo "$CONTENT" >>~/.bash_profile
 
     # Granting Terminal access to iCloud Drive
     echo -e "${LIGHTBLUE}Granting Terminal access to iCloud Drive${NC}"
@@ -188,8 +189,8 @@ option4() {
     echo "This will also add the code-admin scripts to your PATH"
     VSCODE_FOLDER_PATH="${HOME}/code/vscode/"
     echo -e "source ${SCRIPT_FOLDER}/env_variables.sh" >>~/.zshrc
-    echo -e "source ${SCRIPT_FOLDER}/env_variables.sh"  >>~/.zshrc
-    echo -e "source ${SCRIPT_FOLDER}/env_variables.sh"  >>~/.bashrc
+    echo -e "source ${SCRIPT_FOLDER}/env_variables.sh" >>~/.zshrc
+    echo -e "source ${SCRIPT_FOLDER}/env_variables.sh" >>~/.bashrc
 }
 
 option5() {
@@ -209,7 +210,6 @@ option5() {
     install_or_upgrade_cask arc
     install_or_upgrade_cask vivaldi
     install_or_upgrade_cask orion
-
 
     # Design
     install_or_upgrade_cask figma
@@ -253,13 +253,16 @@ option6() {
     install_or_upgrade openai-whisper
 
     install_or_upgrade_cask pgadmin4
+    install_or_upgrade_cask google-cloud-sdk
     install_or_upgrade_cask chromedriver
     install_or_upgrade_cask dbeaver-community
     install_or_upgrade_cask sublime-text
     install_or_upgrade_cask postman
     install_or_upgrade_cask zed@preview
+    install_or_upgrade_cask blackhole-2ch
     install_or_upgrade tesseract
     install_or_upgrade portaudio
+    install_or_upgrade ffmpeg
     install_or_upgrade ffmpeg
 
     # Language Processing

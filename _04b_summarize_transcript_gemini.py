@@ -49,8 +49,6 @@ async def main():
     summarized_transcription = await summarize_transcription_with_gemini(transcript_text)
     with open(summary_file_path, 'w') as f:
         f.write(f"{summarized_transcription} \n\n\n___  ##### Original Transcription\n{transcript_text}")
-
-
     
 async def extract_json_dict_from_llm_response(content):
     def try_to_json(input_value):
@@ -102,16 +100,15 @@ async def summarize_transcription_with_gemini(transcript_text):
     
     instructions = f"""
     Please summarize the following meeting transcription, extracting key topics by type:
-
+        * Action items
+        * Follow-up items
+        * Decisions
         * Factual statements
         * Opinions
         * Speculations
         * Objectives (short, medium, long-term)
-        * Decisions
-        * Follow-up items
         * Sales approaches
         * Product functions
-        * Action items
         * Names, tiles, companies, roles and/or backgrounds of participants who provide said information
 
         Organize the summary by topic type using a markdown format with headers (e.g., "#### Factual Statements").
@@ -163,10 +160,6 @@ async def fetch_gemini_json_response(prompt):
                                           )
         return response
             
-        
-    
-
-
 
 if __name__ == '__main__':
     asyncio.run(main())

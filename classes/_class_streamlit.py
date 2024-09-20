@@ -168,26 +168,6 @@ class streamlit_mytech():
         st.header(f"{self.page_title}",divider='blue')
         
         
-        # #View Session State Button
-        # view_ss = st.sidebar.button(f"Ses. State", use_container_width=True)
-        # if view_ss:
-        #     if st.session_state.show_session_state:
-        #         st.session_state.show_session_state = False
-        #     else:
-        #         st.session_state.show_session_state = True
-
-        # log_exp = st.expander("Extraction Log", expanded=False)
-        
-        # # Display the session state
-        # if st.session_state.show_session_state:
-        #     ss = st.expander("Session State Value", expanded=False)
-        #     ss.write(st.session_state)
-        
-        
-        # Enable the below to see border around the page and all the columns
-        # st.markdown("""<code style="background-color: #FFFFFF; padding: 30px; border-radius: 6px;color: red;">Your HTML content here</code>""", unsafe_allow_html=True)
-
-
 def display_data_tools():
     cs = PsqlSimpleStorage()
 

@@ -50,7 +50,7 @@ class TextExtractor:
         
         self.path_to_extract = sys.argv[1] if len(sys.argv) >= 2 else test_folder_path
             
-        self.logger = None
+        self.logger = Logger()
         
 
         API_KEY = os.environ.get("GOOGLE_API_KEY")
@@ -183,8 +183,9 @@ class TextExtractor:
         pdf_files_to_process = []
         image_files_to_process = []
         officedocs_to_process = []
+        print(f"PATH_PARAMETER = {PATH_PARAMETER}")
         if not os.path.exists(PATH_PARAMETER):
-            self.logger.log(f"Error: Folder/File path not found: {sys.argv[1]}",color="RED")
+            self.logger.log(f"Error: Folder/File path not found: {sys.argv}",color="RED")
             sys.exit(1)
         
         if os.path.isdir(PATH_PARAMETER):
@@ -201,13 +202,15 @@ class TextExtractor:
                     if file.endswith(tuple(self.office_document_types)):
                         officedocs_to_process.append(os.path.join(root, file))
         
+
         if os.path.isfile(PATH_PARAMETER) and not PATH_PARAMETER.startswith("~"):
-            if file.endswith(".pdf"):
-                pdf_files_to_process.append(os.path.join(root, file))
-            if file.endswith(tuple(self.image_types)):
-                image_files_to_process.append(os.path.join (root, file))
-            if file.endswith(tuple(self.office_document_types)):
-                officedocs_to_process.append(os.path.join(root, file))
+            root = os.path.dirname(PATH_PARAMETER)
+            if PATH_PARAMETER.endswith(".pdf"):
+                pdf_files_to_process.append(os.path.join(root, PATH_PARAMETER))
+            if PATH_PARAMETER.endswith(tuple(self.image_types)):
+                image_files_to_process.append(os.path.join (root, PATH_PARAMETER))
+            if PATH_PARAMETER.endswith(tuple(self.office_document_types)):
+                officedocs_to_process.append(os.path.join(root, PATH_PARAMETER))
         
         self.logger.log(f"PDF Files to Process: {pdf_files_to_process}",color="YELLOW")
         self.logger.log(f"Image Files to Process: {image_files_to_process}",color="YELLOW")
@@ -889,7 +892,9 @@ class TextExtractor:
     
         
 if __name__ == "__main__":
-    test_folder = "/Users/michasmi/Downloads/goldmine2/79_285575_23_20231208.pdf"
+    pass
+    test_folder = "/Users/michasmi/Downloads/goldmine2/_attachments/79_340898_9_20231208.pdf"
+    # test_folder = "/Users/michasmi/Downloads/goldmine2/_attachments"
     extractor = TextExtractor(test_folder_path=test_folder, force_rerun=True,)
     asyncio.run(extractor.init_extractor())
          

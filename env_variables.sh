@@ -13,6 +13,9 @@ export PLATFORM_PATH="${HOME}/code/platform"
 export PLATFORM_API_PATH="${HOME}/code/platform/Src/Api"
 export PLATFORM_PROJECT="${PLATFORM_PATH}/Src/Api/Api.csproj"
 export FRONTEND_PATH="${HOME}/code/frontend"
+export SCRIPTS_PATH="${HOME}/code/scripts"
+export SCRIPTS_LIVE_PATH="${HOME}/code/scripts/_live"
+export NOTES_PATH="${HOME}/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Notes\ by\ Michael"
 
 #Key Folder Locations for python scripts and projects
 export NVM_DIR=/opt/homebrew/Cellar/nvm/0.39.7
@@ -24,10 +27,8 @@ export PATH="${PATH}:/usr/sbin:/sbin:/usr/local/bin"      # Standard Path
 # Add additional locations to the PATH
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH" # Homebrew (prioritizing it over the system python)
 export PATH="${PATH}:${HOME}/code/scripts"               # personal scripts
-
 export PATH="${PATH}:/Applications/geckodriver*"
-export SCRIPTS_PATH="${HOME}/code/scripts"
-export NOTES_PATH="${HOME}/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Notes\ by\ Michael"
+export PATH="${PATH}:${SCRIPTS_LIVE_PATH}:${SCRIPTS_PATH}"
 
 # Capture and print the current time:
 ENV_VAR_LOAD_DATE_TIME=$(date '+%Y-%m-%d %H:%M:%S')

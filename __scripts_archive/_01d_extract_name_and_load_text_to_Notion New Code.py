@@ -7,7 +7,6 @@ from notion_client import Client
 connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
 container_name = "document-images"
 
-# Notion API configuration
 
 def upload_to_azure(self, file_path):
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
@@ -44,17 +43,6 @@ def get_or_create_folder_entry(self, folder_name):
             }
         )
         return new_page["id"]
-
-def create_document_entry(self, folder_id, document_name, pdf_url):
-    new_page = notion.pages.create(
-        parent={"database_id": self.documents_database_id},
-        properties={
-            "Name": {"title": [{"text": {"content": document_name}}]},
-            "Folder": {"relation": [{"id": folder_id}]},
-            "PDF URL": {"url": pdf_url}
-        }
-    )
-    return new_page["id"]
 
 def add_content_to_document_page(self, page_id, notion_image_text_list):
     content_blocks = []
@@ -113,24 +101,12 @@ def add_content_to_document_page(self, page_id, notion_image_text_list):
     
     self.notion.blocks.children.append(page_id, children=content_blocks)
 
-def process_notion_image_text_list(pdf_path, notion_image_text_list):
+def process_image_text_list(pdf_path, notion_image_text_list):
     folder_name = Path(pdf_path).parent.name
     document_name = Path(pdf_path).name
     
-    folder_id = self.get_or_create_folder_entry(folder_name)
-    pdf_url = upload_to_azure(pdf_path)
-    document_page_id = self.create_document_entry(self, folder_id, document_name, pdf_url)
-    self.add_content_to_document_page(document_page_id, notion_image_text_list)
+    # folder_id = self.get_or_create_folder_entry(folder_name)
+    # pdf_url = upload_to_azure(pdf_path)
+    # document_page_id = self.create_document_entry(self, folder_id, document_name, pdf_url)
+    # self.add_content_to_document_page(document_page_id, notion_image_text_list)
 
-
-
-
-
-# # Modify the pdf_to_text function to include the new functionality
-# async def pdf_to_text(self, file_path, image_folder_relative_path, page_images_absolute_path):
-#     # ... (existing code remains unchanged)
-
-#     # Add this at the end of the function
-#     process_notion_image_text_list(file_path, notion_image_text_list)
-
-#     return all_text, possible_title, page_count

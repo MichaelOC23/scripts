@@ -1,0 +1,11 @@
+YELLOW: [ N:19:03:08, C:0:00:00, I:0:00:00 ] 
+PDF Files to Process: []
+
+YELLOW: [ N:19:03:08, C:0:00:00, I:0:00:00 ] 
+Image Files to Process: []
+
+YELLOW: [ N:19:03:08, C:0:00:00, I:0:00:00 ] 
+Office Document Files to Process: []
+
+YELLOW: [ N:19:03:08, C:0:00:00, I:0:00:00 ] 
+No PDF, Image, or Office Doc files found to process given input: sysargv: /Users/michasmi/code/scripts/_live

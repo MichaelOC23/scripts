@@ -33,18 +33,17 @@
     },
 
     {
-      "name": "THIS:Quart",
+      "name": "MyTech:Quart",
       "type": "debugpy",
       "request": "launch",
-      "program": "${file}",
+      "program": "/Users/michasmi/code/scripts/_live/000_mytech_quart.py",
       "console": "integratedTerminal",
       "env": {
         "QUART_APP": "quart-app",
         "QUART_ENV": "development",
-        "API_KEY": "${env:DEEPGRAM_API_KEY}",
         "LOG_FOLDER": "logs"
       },
-      "args": ["run", "--host", "0.0.0.0", "--port", "4050"],
+      "args": ["run", "--host", "127.0.0.1", "--port", "4001", "--reload"],
       "justMyCode": true
     }
   ]

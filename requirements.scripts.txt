@@ -101,7 +101,8 @@ imagehash
 scikit-image
 
 # Video Processing
-# pytube
+pytube
+youtube_dl
 
 ### Scraping & Web Automation
 beautifulsoup4
@@ -149,7 +150,10 @@ google-api-python-client
 # aenum
 
 ### Speech Recognition
-# deepgram-sdk
+deepgram-sdk
+pyaudio
+sounddevice==0.4.7
+numpy==2.0.1
 
 ### Apple Development
 # pyobjc
@@ -163,6 +167,7 @@ streamlit-audiorec
 streamlit_extras
 streamlit-elements
 streamlit-card
+streamlit-audiorec
 # streamlit-option-menu
 # streamlit-code-editor
 # streamlit-monaco
