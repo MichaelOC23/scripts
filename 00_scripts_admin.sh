@@ -1,9 +1,10 @@
+
 #!/bin/bash
 
 clear
 
 DNAME="scripts"
-DPATH="${HOME}/code/scripts"
+DPATH="${HOME}/code/streamlit_gcloud_main"
 DPORT=40010
 
 # Color Variables for text
@@ -20,50 +21,6 @@ BLINK='\033[5m'
 NC='\033[0m' # No Color
 
 DNAME_LOWER=$(echo "$DNAME" | tr '[:upper:]' '[:lower:]')
-
-docker_build_and_run() {
-    cd "${DPATH}" || exit 1
-
-    # Stop and remove the existing container if it exists
-    if [ "$(docker ps -q -f name=${DNAME_LOWER}-container)" ]; then
-        echo "Stopping existing container..."
-        docker stop "${DNAME_LOWER}-container"
-    fi
-
-    if [ "$(docker ps -aq -f name=${DNAME_LOWER}-container)" ]; then
-        echo "Removing existing container..."
-        docker rm "${DNAME_LOWER}-container"
-    fi
-
-    #build the Docker container
-    docker_build
-
-    # Run the Docker container
-    echo "Running Docker container..."
-
-    docker_run
-
-    echo "Docker build and run complete for ${DNAME}"
-}
-
-docker_run() {
-    cd "${DPATH}"
-    echo -e "Docker RUN for DNAME=${DNAME}; DPORT=${DPORT} DNAME_LOWER=${DNAME_LOWER}"
-    docker run -d -p "${DPORT}:${DPORT}" --name "${DNAME_LOWER}-container" \
-        -e OFFICE365_BACKGROUND_PORT="${OFFICE365_BACKGROUND_PORT}" \
-        -e AZURE_APP_CLIENT_ID="${AZURE_APP_CLIENT_ID}" \
-        -e AZURE_APP_TENANT_ID="${AZURE_APP_TENANT_ID}" \
-        "${DNAME_LOWER}-app"
-    echo "Docker RUN complete for ${DNAME}"
-    exit 0
-}
-
-docker_build() {
-    cd "${DPATH}"
-    echo "Docker BUILD for ${DNAME}"
-    docker build -t "${DNAME_LOWER}-app" .
-    echo "Docker BUILD complete for ${DNAME}"
-}
 
 dev_env_setup() {
     echo "Building Dev Environment for VS Code"
@@ -160,10 +117,12 @@ dev_env_setup() {
     brew install tesseract
 
     # Installing NLTK libraries
-    install_nltk_libraries
-    
+    # install_nltk_libraries
+
     # Run Playwright install command to download necessary browsers
     playwright install
+
+    sudo pip install firebase-admin
 
     echo -e "\033[5;32mInstallation complete\033[0m"
 
@@ -184,47 +143,4 @@ nltk.download('averaged_perceptron_tagger_eng')
 "
 }
 
-# Function to display the menu
-show_menu() {
-    echo -e "${BOLD}Please choose one of the following options (enter the number):\n"
-    echo -e "${BOLD}|-------------------------------------------------------------|${NC}\n"
-    echo -e "${BOLD}1) Docker ${MAGENTA}RUN ${BOLD}${DNAME} ${NC}"
-    echo -e "${MAGENTA}2) Docker ${LIGHTBLUE_BOLD}BUILD ${BOLD}and ${MAGENTA}RUN ${BOLD}${DNAME} ${NC}"
-    echo -e "${BOLD}3)Build Dev Environment for VS Code ${NC}"
-    echo -e "${BOLD}4)Install NLTK Libraries ${NC}"
-    echo -e "${BOLD} Press Enter to exit ${NC}"
-}
-
-# Function to read the user's choice
-read_choice() {
-    local choice
-    read -p "Enter choice [0 - 10]: " choice
-    case $choice in
-
-    10)
-        docker_run
-        ;;
-    20)
-        docker_build_and_run
-        ;;
-    3)
-        echo "Building Dev Environment for VS Code"
-        dev_env_setup
-        exit 0
-        ;;
-    4)
-        install_nltk_libraries
-        exit 0
-        ;;
-    *)
-        echo "Exiting..."
-        exit 0
-        ;;
-    esac
-}
-
-# Function to read the user's choice
-while true; do
-    show_menu
-    read_choice
-done
+dev_env_setup

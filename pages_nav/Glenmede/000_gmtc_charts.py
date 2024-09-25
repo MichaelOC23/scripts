@@ -207,7 +207,7 @@ class create_new_grid():
         self.currency_symbol = currency_symbol
         self.hide_by_default = hide_by_default
         
-    def create_default_grid(self, dataframe):
+    def create_default_grid(self, dataframe, print_headers=False):
           
         if self.is_none_or_empty(dataframe):
             print ('ERROR: No dataframe provided')
@@ -228,6 +228,9 @@ class create_new_grid():
         gridoptions['enableCharts'] = True  
         gridoptions['enableRangeSelection'] = True
         
+        if print_headers:
+            for col in gridoptions['columnDefs']:
+                print(col['headerName'])
         
 
 

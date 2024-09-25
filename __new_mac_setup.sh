@@ -4,15 +4,17 @@ clear
 echo "This script is designed to be run on a new Mac to set up the environment for business and development use."
 echo "Each step is laid out below:"
 
-SCRIPTS_FOLDER = "${HOME}/code/mytech/docker/Utils/scripts"
+SCRIPTS_PATH="${HOME}/code/scripts"
+NSCCLI_PATH="${HOME}/.nsccli/bin"
+DOTNET_PATH="${HOME}/.dotnet/tools"
 
 # Function to deinitialize a Git repository
 
 show_menu() {
     echo -e "\nSelect an option from the menu:"
-    echo -e "1) Install Homebrew, Python, and Git"
-    echo -e "2) Create a DMG folder and disk image"
-    echo -e "3) Install Azure CLI"
+    echo -e "1) Install Homebrew, Python, and Git Export Environment Variables and Grant Terminal Access to iCloud Drive"
+    echo -e "2) Install Rossetta 1Password Cli and Dashlane Cli"
+    echo -e "3) "
     echo -e "4) Install environment variables using the code-admin scripts"
     echo -e "5) Install Business Applications"
     echo -e "6) Install Development Applications"
@@ -89,24 +91,22 @@ option1() {
     cd ~
     mkdir -p code
     cd code
-    git clone https://github.com/MichaelOC23/mytech.git
+    git clone https://github.com/MichaelOC23/scripts.git
 
     # Setup the paths
-    UTIL_SLINK=".utils"
-    ln -s ${HOME}/code/mytech/docker/Utils ~/${UTIL_SLINK}
+    # UTIL_SLINK=".utils"
+    # ln -s ${HOME}/code/mytech/docker/Utils ~/${UTIL_SLINK}
 
     # Define the content to be added
     CONTENT=$(
         cat <<'EOF'
 # Your multi-line content here
 
-UTILS_PATH="${HOME}/code/mytech/docker/Utils"
-SCRIPTS_PATH="${UTILS_PATH}/scripts"
-NSCCLI_PATH="${HOME}/.nsccli/bin"
-DOTNET_PATH="${HOME}/.dotnet/tools"
+
+
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
-source "${HOME}/${UTIL_SLINK}/scripts/env_variables.sh"
+source "${SCRIPTS_PATH}/env_variables.sh"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
@@ -114,7 +114,7 @@ export NVM_DIR="$HOME/.nvm"
 # This loads nvm add bash_completion
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
-export PATH="$PATH:$UTILS_PATH:$SCRIPTS_PATH:$NSCCLI_PATH:$DOTNET_PATH"
+export PATH="$PATH:$SCRIPTS_PATH:$NSCCLI_PATH:$DOTNET_PATH"
 EOF
     )
 
@@ -139,11 +139,11 @@ EOF
 
     # Append the content to .zshrc and .zprofile
     echo "$CONTENT" >>~/.zshrc
-    echo "$CONTENT" >>~/.zprofile
+    # echo "$CONTENT" >>~/.zprofile
 
     # Append the content to .bashrc and .bash_profile
     echo "$CONTENT" >>~/.bashrc
-    echo "$CONTENT" >>~/.bash_profile
+    # echo "$CONTENT" >>~/.bash_profile
 
     # Granting Terminal access to iCloud Drive
     echo -e "${LIGHTBLUE}Granting Terminal access to iCloud Drive${NC}"
@@ -162,7 +162,8 @@ option2() {
     softwareupdate --install-rosetta
 
     # Dashlane CLI
-    brew install dashlane/tap/dashlane-cli
+    install_or_upgrade install dashlane/tap/dashlane-cli
+    install_or_upgrade 1password-cli
 
     # Sync Dashlane
     echo -e "Please login with your Dashlane email address and password."
@@ -170,18 +171,19 @@ option2() {
     echo -e "The command is: dcli sync, which will be executed now."
     dcli sync
 
+    # echo "You chose Option 3:"
+    # echo "This will create a DMG folder and disk image in ~/dmg"
+
+    # # Create the dmg folder
+    # mkdir -p ~/dmg
+    # # Ask the user how big to make the data dmg, but suggest 200GB.
+    # hdiutil create -size 300g -fs APFS -volname "data" -encryption AES-256 -stdinpass -attach ~/dmg/code.dmg
+
 }
 
-option3() {
-    echo "You chose Option 3:"
-    echo "This will create a DMG folder and disk image in ~/dmg"
+# option3() {
 
-    # Create the dmg folder
-    mkdir -p ~/dmg
-
-    # Ask the user how big to make the data dmg, but suggest 200GB.
-    hdiutil create -size 300g -fs APFS -volname "data" -encryption AES-256 -stdinpass -attach ~/dmg/code.dmg
-}
+# }
 
 option4() {
     echo "You chose Option 4:"
@@ -222,7 +224,7 @@ option5() {
     install_or_upgrade_cask spotify
 
     # Security
-    install_or_upgrade 1password-cli
+
     install_or_upgrade_cask private-internet-access
 
     # Recommended Installs from the Mac App Store: (print text out in CYAN)
@@ -246,6 +248,7 @@ option6() {
     npm -v
 
     install_or_upgrade_cask visual-studio-code
+
     install_or_upgrade jq
     install_or_upgrade poppler
     install_or_upgrade_cask ollama
@@ -263,7 +266,10 @@ option6() {
     install_or_upgrade tesseract
     install_or_upgrade portaudio
     install_or_upgrade ffmpeg
-    install_or_upgrade ffmpeg
+
+    install_or_upgrade_cask google-cloud-sdk
+    gcloud auth login
+    gcloud config set project toolsexplorationfirebase
 
     # Language Processing
     pip install --upgrade spacy

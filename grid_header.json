@@ -1,0 +1,14 @@
+{
+  "duration": "duration",
+  "transcription_raw": "transcription_raw",
+  "modifiedon": "modifiedon",
+  "document_id": "document_id",
+  "speaker_names": "speaker_names",
+  "public_url": "public_url",
+  "summary": "summary",
+  "topics": "topics",
+  "created": "created",
+  "createdon": "createdon",
+  "modified": "modified",
+  "name": "name"
+}

@@ -9,10 +9,11 @@ HOME_DIR="${HOME}"
 cd "${HOME}"
 echo "Current directory is ${PWD} after cd to ${HOME_DIR}"
 
-JBI_FOLDER=".jbi"
+JBI_FOLDER=".setup"
+ARCHIVE_SUFFIX="-archive"
 JBI_FOLDER_PATH="${HOME}/${JBI_FOLDER}"
 ARCHIVE_FOLDER_DATE_NAME="$(date '+%Y-%m-%d_%H-%M-%S')"
-ARCHIVE_FOLDER_DATE_PATH="${HOME}/.jbi-archive/${ARCHIVE_FOLDER_DATE_NAME}"
+ARCHIVE_FOLDER_DATE_PATH="${HOME}/${JBI_FOLDER}-${ARCHIVE_SUFFIX}/${ARCHIVE_FOLDER_DATE_NAME}"
 echo "ARCHIVE_FOLDER_DATE_NAME is ${ARCHIVE_FOLDER_DATE_NAME}"
 echo "JBI_FOLDER is ${JBI_FOLDER} and ARCHIVE_FOLDER_DATE_NAME is ${ARCHIVE_FOLDER_DATE_NAME} and JBI_FOLDER_PATH is ${JBI_FOLDER_PATH}"
 
@@ -21,8 +22,8 @@ if [ -d "${JBI_FOLDER_PATH}" ]; then
     echo "JBI folder already exists."
 
     # Create the archive directory
-    mkdir -p .jbi-archive
-    cd .jbi-archive
+    mkdir -p ${JBI_FOLDER}-${ARCHIVE_SUFFIX}
+    cd ${JBI_FOLDER}-${ARCHIVE_SUFFIX}
     mkdir -p $ARCHIVE_FOLDER_DATE_NAME
 
     cd "${HOME}"

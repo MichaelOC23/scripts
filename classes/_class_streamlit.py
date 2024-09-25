@@ -68,29 +68,56 @@ MODEL_DICT = {
 ####       STREAMLIT CLASS      ####
 ####################################
 class streamlit_mytech():
-    def __init__(self):
+    def __init__(self, theme = 'cflight' ):
+        themes = {
+            'cflight':{
+                'primary':'#003366',
+                'background':'#FFFFFF',
+                'sidebar':'#F0F2F6',
+                'text':'#003366',
+                'logo_url':'https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cfyd.png',
+                'logo_icon_url': 'https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cficonlogo.png',
+                'font': 'sans serif'
+                },
+            'cfdark':{
+                'primary':'#98CCD0',
+                'background':'#003366',
+                'sidebar':'#404040',
+                'text':'#CBD9DF',
+                'logo_url':'https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cfyd.png',
+                'logo_icon_url': 'https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cficonlogo.png',
+                'font': 'sans serif'
+                },
+            'otherdark':{}
+            }
+        
+        
         self.model_dict = MODEL_DICT
         self.setup_database = False
-        self.primary_color = "#003366"
-        self.background_color = "#FFFFFF"
-        self.secondary_background_color = "#F0F2F6"
-        self.text_color = "#003366"
-        self.font = "sans serif"
+        self.primary_color = themes.get(theme, {}).get('primary', '')
+        self.background_color = themes.get(theme, {}).get('background', '')
+        self.secondary_background_color = themes.get(theme, {}).get('sidebar', '')
+        self.text_color = themes.get(theme, {}).get('text', '')
+        self.font = themes.get(theme, {}).get('font', '')
+        self.logo_url = themes.get(theme, {}).get('logo_url', '')
+        self.logo_icon_url = themes.get(theme, {}).get('logo_icon_url', '')
+        
         self.page_title = "New Page"
-        self.logo_url = "https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cfyd.png"
-        self.logo_icon_url = "https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cficonlogo.png"
-        # self.logo_icon_url = "https://devcommunifypublic.blob.core.windows.net/devcommunifynews/jbi-logo-name@3x.png"
+        
+        self.home_dir = Path.home()
+        self.home_config_file_path = f'{self.home_dir}/.streamlit/config.toml'
+        self.working_config_file_path = f'.streamlit/config.toml'
+        self.master_config_file_path = f'{self.home_dir}/code/scripts/.streamlit/master_streamlit_config.toml'
 
+        self.set_theme()
+    
     def set_theme(self):
         # Step 1: Load the existing config.toml file
         # use pathlib to get the directory of user's home directory
-        home_dir = Path.home()
-        home_config_file_path = f'{home_dir}/.streamlit/config.toml'
-        working_config_file_path = f'.streamlit/config.toml'
-        master_config_file_path = '/Users/michasmi/code/scripts/.streamlit/master_streamlit_config.toml'
         
-        if os.path.exists(master_config_file_path):
-            with open(master_config_file_path, 'r') as file:
+        
+        if os.path.exists(self.master_config_file_path):
+            with open(self.master_config_file_path, 'r') as file:
                 config_data = toml.load(file)
         else:
             config_data = {}
@@ -110,9 +137,10 @@ class streamlit_mytech():
             config_data[setting[0]][setting[1]] = setting[2]
     
         # Step 3: Write the changes back to the config.toml file
-        with open(home_config_file_path, 'w') as file:
+        with open(self.home_config_file_path, 'w') as file:
             toml.dump(config_data, file)    
-        with open(working_config_file_path, 'w') as file:
+        
+        with open(self.working_config_file_path, 'w') as file:
             toml.dump(config_data, file)    
         
     def set_up_page(self, page_title_text=None, 
@@ -165,7 +193,7 @@ class streamlit_mytech():
         
         # 
         st.logo(self.logo_icon_url, icon_image=self.logo_url)
-        st.header(f"{self.page_title}",divider='blue')
+        st.header(f"{self.page_title}",divider=True)
         
         
 def display_data_tools():

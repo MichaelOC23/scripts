@@ -2,26 +2,33 @@
 
 # Key folders
 CODE_PATH="${HOME}/code"
-# Communify Paths
-PLATFORM_PATH="${CODE_PATH}/platform"
-FRONTEND_PATH="${CODE_PATH}/frontend"
+
+#!/bin/bash
+
+# Function to get the creation date of the file in YYYY-MM-DD format
+get_creation_date() {
+    # Using stat to get the creation date in YYYY-MM-DD format
+    creation_date=$(stat -f "%SB" -t "%Y-%m-%d" "$1")
+    echo "$creation_date"
+}
+
+SOURCE_FOLDER="/Users/michasmi/Library/Group Containers/group.com.apple.VoiceMemos.shared/Recordings"
+DESTINATION_FOLDER="/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes By Michael/Transcriptions/.audio"
 
 # Scripts Paths
-SCRIPT_PATH="${CODE_PATH}/mytech/docker/Utils/scripts"
+SCRIPT_PATH="${CODE_PATH}/scripts"
 SCRIPT_VENV_PATH="${SCRIPT_PATH}/scripts_venv/bin/activate"
 SCRIPT_PYTHON_PATH="${SCRIPT_PATH}/scripts_venv/bin/python"
-
-echo -e "args: $2"
 
 #Folder path to process
 FOLDER_PATH=""
 
 if [ -z "$1" ]; then
     # If no argument is provided, set val to the current working directory
-    FOLDER_PATH=$(pwd)
+    FOLDER_PATH="${SOURCE_FOLDER}"
 elif [ "$1" = "." ]; then
     # If the argument is ".", set val to the current working directory
-    FOLDER_PATH=$(pwd)
+    FOLDER_PATH="$(pwd)"
 else
     # If the argument exists and is not ".", set val to the argument value
     FOLDER_PATH="$1"
@@ -53,10 +60,18 @@ DEEPGRAM_URL="https://api.deepgram.com/v1/listen?topics=true&smart_format=true&p
 echo -e "Beginning m4a to mp3 conversion and transcription for files in folder: \033[1;95m${FOLDER_PATH}\033[0m"
 echo -e "Transcriptions will be saved in: \033[1;95m${TRANS_DIR}\033[0m"
 shopt -s nullglob
-echo "Contents: $(ls $FOLDER_PATH)"
+
+
+AUDIO_COPIES="${HOME}/.audio_copies"
+mkdir -p "${AUDIO_COPIES}"
+
+echo -e "Source folder: ${FOLDER_PATH}"
+echo -e "Copies dest folder: ${AUDIO_COPIES}"
+
+cp -R "$FOLDER_PATH"/* "$AUDIO_COPIES"
 
 # Loop through all files in the folder
-for file in "$FOLDER_PATH"/*; do
+for file in "${AUDIO_COPIES}"/*; do
     echo -e "\033[1;95mProcessing file: $file\033[0m"
     if [[ "$file" == *.m4a || "$file" == *.mp3 || "$file" == *.wav ||
         "$file" == *.aac || "$file" == *.flac || "$file" == *.ogg ||
@@ -137,6 +152,7 @@ for file in "$FOLDER_PATH"/*; do
 
         # Construct the final file name
         TEXT_TRAN_FILE_NAME="${creation_date}.${file_name_part}.${duration_formatted}.md"
+        DIARIZED_TEXT_TRAN_FILE_NAME="${creation_date}.${file_name_part}.diarized.${duration_formatted}.md"
         TEXT_TRAN_FILE_PATH="${TEXT_TRANS_DIR}/${TEXT_TRAN_FILE_NAME}"
         cd "${SCRIPTS_PATH}" && source "${SCRIPT_VENV_PATH}"
         if [[ ! -f "${TRANS_FILE_PATH}" ]]; then
@@ -151,11 +167,12 @@ for file in "$FOLDER_PATH"/*; do
             sleep 2
 
             # jq -r '.results.channels[0].alternatives[0].transcript' "$TRANS_FILE_PATH" >"${TEXT_TRANS_DIR}/${TEXT_TRAN_FILE_NAME}" && \
+            jq -r '.results.utterances[] | "Speaker \(.speaker): \(.transcript)"' "${TRANS_FILE_PATH}" >"${TEXT_TRANS_DIR}/${DIARIZED_TEXT_TRAN_FILE_NAME}"
 
             echo -e "\033[0;32mBeginning transcription and summarization of ${TEXT_TRAN_FILE_NAME}\033[0m"
         fi
         if [[ ! -f "${TEXT_TRAN_FILE_PATH}" ]]; then
-            eval "python \"${SCRIPTS_PATH}/_04b_summarize_transcript_gemini.py\" \"${TRANS_FILE_PATH}\" \"${TEXT_TRAN_FILE_PATH}\""
+            eval "${SCRIPT_PYTHON_PATH} \"${SCRIPTS_PATH}/_04b_summarize_transcript_gemini.py\" \"${TRANS_FILE_PATH}\" \"${TEXT_TRAN_FILE_PATH}\""
         fi
     fi
 done

@@ -16,9 +16,10 @@ export FRONTEND_PATH="${HOME}/code/frontend"
 export SCRIPTS_PATH="${HOME}/code/scripts"
 export SCRIPTS_LIVE_PATH="${HOME}/code/scripts/_live"
 export NOTES_PATH="${HOME}/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Notes\ by\ Michael"
+export GOOGLE_CLOUD_FIREBASE_KEY="/Users/michasmi/.setup/keys/toolsexplorationfirebase-5f4d4c4c883e.json"
 
 #Key Folder Locations for python scripts and projects
-export NVM_DIR=/opt/homebrew/Cellar/nvm/0.39.7
+export NVM_DIR="/opt/homebrew/Cellar/nvm/0.39.7"
 
 # PATH export (Standard mac path)
 export PATH="/System/Cryptexes/App/usr/bin:/usr/bin:/bin" # Standard Path
