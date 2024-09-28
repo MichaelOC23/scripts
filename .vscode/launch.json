@@ -31,6 +31,15 @@
       "justMyCode": true,
       "console": "integratedTerminal"
     },
+    {
+      "name": "G-Cloud",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "streamlit",
+      "args": ["run", "gcloud/app.py"],
+      "justMyCode": true,
+      "console": "integratedTerminal"
+    },
 
     {
       "name": "MyTech:Quart",

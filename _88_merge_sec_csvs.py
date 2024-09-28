@@ -19,6 +19,7 @@ stm.set_up_page(page_title_text="DataGen: US Prospects",
 
 st.session_state['show_table_pages'] = False
 nav_dict={}
+
 class create_new_grid():
     def __init__(self, 
                  col_val_list=None,
@@ -95,6 +96,7 @@ class create_new_grid():
             return True
         except (ValueError, TypeError):
             return False
+    
     def create_default_grid(self, dataframe):
           
         if self.is_none_or_empty(dataframe):
@@ -261,6 +263,8 @@ class create_new_grid():
         # print(f"Type of dataframe before processing: {type(dataframe)}")
         
         return grid_return
+
+
 
 class CSVToPostgres:
     def __init__(self, start_folder_path=None, schema='datagen', likely_key_names = [], table_prefix='', column_prefix='c'):
@@ -967,7 +971,7 @@ if __name__ == '__main__':
                 # df1 = csvpg.execute_select_query("""SELECT i.cfilingid, i.cfulllegalname || '; ' || i.ctitleorstatus as pers FROM datagen.iascheduleab2024010120240331 i WHERE i.cdefei = 'I';""")
                 # df1 = df1.groupby('cfilingid')['pers'].agg(', '.join).reset_index()
                 # df_merged = pd.merge(df_base, df1, on='cfilingid', how='left')
-                
+          
   
                 
                 # return
@@ -1000,9 +1004,6 @@ if __name__ == '__main__':
                 pg_table_grid.display_grid(df_merged)
                 print('done')
 
-       
-       
-       
         nav_dict= {
             "Awesome US Target Lists": [
             st.Page(page=firmList, title="Why did you click here?", url_path='home'),    
@@ -1017,26 +1018,28 @@ if __name__ == '__main__':
             ]
             }
         
-        def define_function_from_string(table_name='', title=''):
-            # Define the function code as a string
-            func_code = f"""
         
-def func{table_name}():
-    csvpg = CSVToPostgres(schema='datagen', likely_key_names=['cfilingid', 'creferenceid', 'ccik'], table_prefix='', column_prefix='c',)
-    pg_table_grid = create_new_grid(enablePivot=False)
-    st.subheader(f'Table / Filing: {title}')
-    st.divider()
-    if '{table_name}' in st.session_state:
-        df = st.session_state['{table_name}']
-        pg_table_grid.display_grid(df)
-    elif st.button('Show me the data: {title}'):
-        sql = f"Select * from datagen.{table_name}"
-        st.write (sql)
-        df = csvpg.execute_select_query(sql)
-        pg_table_grid.display_grid(df)
-        st.session_state['{table_name}'] = df
-
-nav_dict["Filings"].append(st.Page(page=func{table_name}, title="{title}", url_path="{table_name}"))"""
+        
+        def define_function_from_string(table_name='', title=''):
+            func_code = (
+                f"def func{table_name}():\n"
+                f"    csvpg = CSVToPostgres(schema='datagen', likely_key_names=['cfilingid', 'creferenceid', 'ccik'], table_prefix='', column_prefix='c',)\n"
+                f"    pg_table_grid = create_new_grid(enablePivot=False)\n"
+                f"    st.subheader(f'Table / Filing: {title}')\n"
+                f"    st.divider()\n"
+                f"    if '{table_name}' in st.session_state:\n"
+                f"        df = st.session_state['{table_name}']\n"
+                f"        pg_table_grid.display_grid(df)\n"
+                f"    elif st.button('Show me the data: {title}'):\n"
+                f"        sql = f\"Select * from datagen.{table_name}\"\n"
+                f"        st.write(sql)\n"
+                f"        df = csvpg.execute_select_query(sql)\n"
+                f"        pg_table_grid.display_grid(df)\n"
+                f"        st.session_state['{table_name}'] = df\n"
+                f"\n"
+                f"nav_dict['Filings'].append(st.Page(page=func{table_name}, title='{title}', url_path='{table_name}'))\n"
+            )
+            
             
             # Explicitly pass nav_dict as part of the local context
             local_context = {'nav_dict': nav_dict, 'csvpg':csvpg}

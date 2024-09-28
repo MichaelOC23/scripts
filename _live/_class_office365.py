@@ -1,21 +1,14 @@
-from quart import Quart, request, jsonify, redirect, url_for, session  # Changed from Flask to Quart
+
+from quart import request, jsonify, redirect, url_for, session  # Changed from Flask to Quart
 import json
 import os
 from urllib.parse import urlencode
 import requests
 import base64
 import hashlib
-import setproctitle
-import openai
+from openai import OpenAI
 from datetime import datetime, timedelta
 
-#########################################
-####      OFFICE 365  FUNCTIONS      ####
-#########################################
-
-
-
-    
 
 class office365_tools():
     def __init__(self):
@@ -35,7 +28,6 @@ class office365_tools():
         self.GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0'
         
         self.MSFT_TOKEN_JSON = os.environ.get('MSFT_TOKEN_JSON', '')
-        
         self.OFFICE365_BACKGROUND_PORT = os.environ.get('MYTECH_QUART_PORT', 4008)
         
         # OAuth Endpoints
@@ -44,27 +36,21 @@ class office365_tools():
         
         self.app.secret_key = os.urandom(24)
 
-
-
-
     def calculate_expiration(self, expires_in_seconds):
         expiration_time = datetime.now() + timedelta(seconds=expires_in_seconds)
         expiration_time_str = expiration_time.strftime('%Y-%m-%d %H:%M:%S')
         return expiration_time_str
 
-    @app.route('/exporttoken')
     async def export_token(self):
         with open('token.json', 'w') as f:
             f.write(self.MSFT_TOKEN_JSON)
-
-    @app.route('/setglobalaccesstoken', methods=['POST'])
+    
     async def set_value(self):
         global access_token
         data = await request.get_json()
         access_token = data.get('access_token', '')
         return jsonify({"status": "Access token set"}), 200
-
-    @app.route('/')
+    
     async def homepage(self):
         def generate_code_verifier():
             return base64.urlsafe_b64encode(os.urandom(32)).rstrip(b'=').decode('utf-8')
@@ -91,7 +77,6 @@ class office365_tools():
         print(auth_url)
         return redirect(auth_url)
 
-    @app.route('/redirect')
     async def auth_redirect(self):
         global access_token
 
@@ -146,7 +131,26 @@ class office365_tools():
 
         return jsonify({"status": "Access token obtained"}), 200
 
-    @app.route('/create_task_auth', methods=['POST'])
+    async def call_openai_api(prompt=None):        
+        """
+        Call OpenAI API with the given prompt and return the response.
+        """
+        try:
+            if not prompt:
+                prompt = "Write me a haiku about Star Wars."
+
+            client = OpenAI()
+            completion = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "user", "content": prompt}
+                ]
+            )
+            reply = completion.choices[0].message.content
+            return jsonify({'response': reply})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        
     async def create_task(self,task_request=None):
         global access_token
         data = await request.get_json()
@@ -173,14 +177,33 @@ class office365_tools():
         else:
             return jsonify({"error": "Invalid task details generated"}), 500
 
-    @app.route('/create_task_no_auth', methods=['POST'])
-    async def create_task_no_auth(self,):
+    async def create_task_no_auth(self):
         data = await request.get_json()
         user_request = data.get('user_request')
 
         # Assume that the global access_token variable is set with the access token.
         task_details = self.create_todo_task_with_user_request(user_request, access_token)
-        
+    
+    async def parse_response(self, response_text):
+        """
+        Parse the response text to extract a JSON object.
+        """
+        try:
+            return json.loads(response_text)
+        except json.JSONDecodeError:
+            try:
+                start_index = response_text.find('{')
+                end_index = response_text.rfind('}') + 1
+                if start_index != -1 and end_index != -1:
+                    json_str = response_text[start_index:end_index]
+                    return json.loads(json_str)
+                else:
+                    print("Error: No JSON object found in the response.")
+                    return None
+            except json.JSONDecodeError:
+                print("Error: Failed to parse JSON from the cleaned response.")
+                return None
+    
     def create_todo_task_with_user_request(self, user_request, access_token):
         """
         Create a new task in Microsoft To Do using Microsoft Graph API based on a user request.
@@ -287,13 +310,5 @@ class office365_tools():
         # Call OpenAI API with the prompt
         ai_response = self.call_openai_api(prompt)
 
-        return parse_response(ai_response)
+        return self.parse_response(ai_response)
 
-
-
-if __name__ == "__main__":
-    
-    # Set the process title
-    setproctitle.setproctitle("Office365Background")
-    o365 = office365_tools()
-    app.run(host="0.0.0.0", port=o365.OFFICE365_BACKGROUND_PORT, debug=False)

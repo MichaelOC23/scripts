@@ -3,10 +3,10 @@ import os
 import pathlib  
 
 
-class _navigation:
+class navigation_streamlit:
     def __init__(self):
         self.folder_name = "pages_nav"
-        self.start_folder = f"{os.getcwd()}/{self.folder_name}"
+        self.start_folder = f"{os.getcwd()}/gcloud/{self.folder_name}"
         self.folder_structure = self.get_folder_structure(self.start_folder)
         self.menu = None
     
@@ -27,7 +27,7 @@ class _navigation:
         
         # Iterate through all items in the start_folder
         for sub_folder in os.listdir(start_folder):
-            sub_folder_path = f"{start_folder_name}/{sub_folder}"
+            sub_folder_path = f"{start_folder}/{sub_folder}"
             if not os.path.isdir(sub_folder_path): 
                 continue
             
@@ -95,10 +95,11 @@ class _navigation:
        
     def check_if_authenticated(self):
         isAuthenticated = False
-        if os.environ.get("STREAMLIT_DEV_MODE", "FALSE") == "TRUE": 
-            isAuthenticated = True
-
-        if 'role' in st.session_state and st.session_state.get('role', 'notuser') == 'user':
+        if 'IS_AUTHENTICATED_TO_GOOGLE' not in st.session_state:
+            st.session_state['IS_AUTHENTICATED_TO_GOOGLE'] = False
+            return isAuthenticated
+        
+        if st.session_state['IS_AUTHENTICATED_TO_GOOGLE']:
             isAuthenticated = True
         
         if isAuthenticated:
@@ -106,16 +107,7 @@ class _navigation:
 
         return isAuthenticated
         
-    def auth_user(self, user, password):
-        if user is None or user.strip() == "": return False
-        if password is None or password.strip() == "": return False
-        
-        if "communify" in user or "justbuildit" in user:
-            if "Heavy95!" in password: 
-                st.session_state['role']= 'user'
-                return self.check_if_authenticated()
-        return False
-                
+    
         
 
 

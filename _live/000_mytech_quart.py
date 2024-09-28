@@ -1,15 +1,26 @@
-from quart import Quart, jsonify
+from quart import Quart, request, jsonify, redirect, url_for, session  # Changed from Flask to Quart
+
 import json
 import os
 import setproctitle
 from openai import OpenAI
 
 from _class_deepgram import deepgram_audio_transcription
-app = Quart(__name__)
+from _class_office365 import office365_tools
+
 dg = deepgram_audio_transcription()
+o365 = office365_tools()
+
+
+app = Quart(__name__)
 
 DEFAULT_INPUT_DEVICE_CODE = 'InCaMi'
 print("Loaded Standard Quart Libraries")
+
+
+#########################################
+####       DEEPGRAM  FUNCTIONS       ####
+#########################################
 
 @app.route('/')
 async def call_openai_api(prompt=None):
@@ -54,7 +65,6 @@ async def start_log_airpods():
 async def start_log_custom():
     val = await start_meeting_log('InCaCustom')
     return "Starting custom meeting"
-
 
 
 async def start_meeting_log(input_device=DEFAULT_INPUT_DEVICE_CODE):
@@ -104,6 +114,42 @@ def parse_response(response_text):
         except json.JSONDecodeError:
             print("Error: Failed to parse JSON from the cleaned response.")
             return None
+
+
+
+#########################################
+####      OFFICE 365  FUNCTIONS      ####
+#########################################
+
+
+@app.route('/setglobalaccesstoken', methods=['POST'])
+async def setglobalaccesstoken():
+    return await (o365.set_value(request))
+ 
+ 
+@app.route('/exporttoken')
+async def exporttoken():
+    return await o365.export_token(request)
+
+@app.route('/')
+async def index():
+    return await o365.homepage(request)
+ 
+@app.route('/redirect')
+async def redirect(request):
+    return await o365.auth_redirect(request)
+
+
+@app.route('/create_task_auth', methods=['POST'])
+async def createtask(request):
+    return await o365.create_task(request)
+ 
+@app.route('/create_task_no_auth', methods=['POST'])
+async def createtasknoauth(request):
+    return await o365.create_task_no_auth
+ 
+
+
 
 if __name__ == "__main__":
     # Set the process title

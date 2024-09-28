@@ -19,6 +19,19 @@ import dow_jones as dj
 # Dow Jones Newswires Real-Time API Documentation. https://developer.dowjones.com/site/docs/newswires_apis/dow_jones_newswires_real_time_api/index.gsp
 # Newswires API Certification Documentation.https://developer.dowjones.com/site/docs/newswires_apis/certification_process/index.gsp
 # Authentication and Authorization details. https://developer.dowjones.com/site/docs/quick_start/authenticating_into_dowjones/index.gsp
+
+# if connect_to_dj:
+#             initialize_session_state_variable("djsession", None)
+#             initialize_session_state_variable("djtoken", {})
+#             initialize_session_state_variable("djtoken_status_message", "") 
+#             initialize_session_state_variable("search_result_cache", "") 
+#             initialize_session_state_variable("viewed_article_cache", "") 
+#             initialize_session_state_variable("show_results", False)
+#             initialize_session_state_variable("show_article", False) 
+#             initialize_session_state_variable("chat_has_started", False)
+#             initialize_session_state_variable("show_search_results", False)
+#             initialize_session_state_variable("current_search_summary", "")
+
 #!Setup
 def UNIQUE_DATE_TIME_STRING(): 
 	return datetime.now().strftime("%Y%m%d.%H%M%S") #note this is unique to the second i.e. per run

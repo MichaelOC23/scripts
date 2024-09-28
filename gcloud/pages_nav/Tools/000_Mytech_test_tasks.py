@@ -36,9 +36,9 @@ def run_asyncio(coroutine):
     return asyncio.run(coroutine)
 BASE_URL = "http://localhost:4001"
 PAGE_TITLE = "Utils"
-st.set_page_config(
-        page_title=PAGE_TITLE, page_icon=":earth_americas:", layout="wide", initial_sidebar_state="expanded",
-        menu_items={'Get Help': 'mailto:michael@justbuildit.com','Report a bug': 'mailto:michael@justbuildit.com',})    
+# st.set_page_config(
+#         page_title=PAGE_TITLE, page_icon=":earth_americas:", layout="wide", initial_sidebar_state="expanded",
+#         menu_items={'Get Help': 'mailto:michael@justbuildit.com','Report a bug': 'mailto:michael@justbuildit.com',})    
 def set_up_page(page_title_text=PAGE_TITLE, light_or_dark="dark", session_state_variables=[]):    
     def initialize_session_state_variable(variable_name, variable_value):
         if variable_name not in st.session_state:

@@ -1,21 +1,18 @@
-# Imports
-import os
-import threading
-import traceback
-
-import httpx
 import streamlit as st
-from _class_streamlit import streamlit_mytech
-from _class_firebase import FirestoreStorage
-from _class_aggrid import AggridUtils
 import asyncio
+import os
+import time
 
+from _class_streamlit import streamlit_mytech
 stm = streamlit_mytech(theme='cfdark')
-fire = FirestoreStorage()
-# agu = AggridUtils(rowSelection="single", hide_by_default=True)
 
 stm.set_up_page(page_title_text="Meeting Log",
-                session_state_variables=[{"TransStatus": False}]) 
+                session_state_variables=[{"TransStatus": False}], )
+
+from _class_firebase import FirestoreStorage
+fire = FirestoreStorage()
+
+
 st.subheader("Select a Meeting:", divider=True)
 
 header_dict = {
@@ -62,6 +59,3 @@ with vcol:
     if 'selected_document_id' in st.session_state and st.session_state['selected_document_id'] is not None:
         doc = asyncio.run(fire.get_full_transcription(st.session_state["selected_document_id"]))
         st.write(doc)
-
-
-

@@ -7,6 +7,8 @@ import os
 import asyncio
 import json
 from datetime import datetime, timezone
+from google.cloud import secretmanager
+
 
 
 
@@ -20,9 +22,13 @@ class FirestoreStorage:
         self.db = firestore.Client()
         self.test_dictionary = {'name': 'Jane Doe','email': 'janedoe@example.com','age': 28, "createdon": datetime.now()}
         self.default_collection = "original_json_transcription"
+        self.cred_dict = {}
         if not firebase_admin._apps:
-            cred_path = os.environ.get("GOOGLE_CLOUD_FIREBASE_KEY")
-            self.cred = credentials.Certificate(cred_path)
+            cred_json = self.access_secret_version("GOOGLE_CLOUD_FIREBASE_KEY")
+            # Parse the JSON string into a dictionary
+            self.cred_dict = json.loads(cred_json)
+            # Pass the dictionary to the Firebase credentials.Certificate() method
+            self.cred = credentials.Certificate(self.cred_dict)
             firebase_admin.initialize_app(self.cred, {'storageBucket': 'toolstorage'})
         
         #Containers
@@ -30,7 +36,30 @@ class FirestoreStorage:
         
         # Initialize Storage Bucket
         self.bucket = storage.bucket()
+        
+        
+        
+        self.bucket = storage.bucket()
     
+    def access_secret_version(self, secret_id, project_id='toolsexplorationfirebase',  version_id="latest"):
+        secret_payload = ''
+        try:
+            # Create the Secret Manager client
+            client = secretmanager.SecretManagerServiceClient()
+
+            # Build the resource name of the secret version
+            name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+
+            # Access the secret version
+            response = client.access_secret_version(request={"name": name})
+
+            # Decode the secret payload and return it
+            secret_payload = response.payload.data.decode("UTF-8")
+            
+        except:
+            secret_payload = os.environ.get(secret_id, '')
+        
+        return secret_payload
     async def get_document_by_id(self, document_id, collection_name=None):
         """
         Retrieves a single document from Firestore using its document_id.
@@ -197,6 +226,7 @@ class FirestoreStorage:
                 summary = document_id
 
                 topics = []
+                # ['results']['topics']['segments'][0]['topics'][0]['topic']
                 for segment in data_dictionary['results']['topics']['segments']:
                     for topic in segment['topics']:
                         topics.append(topic.get('topic', ''))
