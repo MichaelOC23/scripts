@@ -8,16 +8,13 @@ import asyncio
 import json
 from datetime import datetime, timezone
 from google.cloud import secretmanager
+import requests
+import time
+from tqdm import tqdm
 
 
 
-
-# Initialize Firebase app (if not already done)
-
-
-
-
-class FirestoreStorage:
+class SecurityMasterStorage:
     def __init__(self):
         self.db = firestore.Client()
         self.test_dictionary = {'name': 'Jane Doe','email': 'janedoe@example.com','age': 28, "createdon": datetime.now()}
@@ -79,7 +76,6 @@ class FirestoreStorage:
         except Exception as e:
             print(f"Error retrieving document {document_id}: {e}")
             return None
-
 
     async def get_best_document_id(self, data_dictionary, document_id):
         if document_id:
@@ -151,7 +147,24 @@ class FirestoreStorage:
         trans_df.set_index('document_id', inplace=True)
 
         return trans_df
-        
+    
+    #! Start at rename
+    async def get_all_documents_from_collection(self, collection_name=None):
+
+        # Check if collection name is provided or use default one
+
+        # Query Firestore, ordered by 'timestamp' descending, limited to 'count'
+        query = self.db.collection(collection_name).order_by('created', direction=firestore.Query.DESCENDING)
+
+       # Get the query result asynchronously
+        results = query.stream()
+
+        # Gather the dictionaries from the query result
+        documents = {}
+        for doc in results:  # Directly iterate over the StreamGenerator
+            documents[doc.id] = doc.to_dict()
+        return documents
+    
     async def get_transcription_records(self):
 
         # Check if collection name is provided or use default one
@@ -296,6 +309,7 @@ class FirestoreStorage:
         except Exception as e:
             print(f"Error retrieving or parsing JSON from blob: {e}")
             return None
+    
     async def get_blob(self, file_path):
             """
             Retrieves a blob (file) from Firebase Storage given the full file path.
@@ -343,30 +357,86 @@ class FirestoreStorage:
         
         except Exception as e:
             print(f"Error downloading blob: {e}")
-
-# Example usage
-# image_url = upload_file("path/to/local/image.jpg", "images/profile_pic.jpg")
-
-
-async def test_class(insert_count):
-    fire = FirestoreStorage()
     
-    transcription_name = f"{uuid.uuid4()}"
-    
-    await fire.upload_folder_of_json_files_to_cloud_storage("/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes By Michael/Transcriptions/.trans_json", fire.original_transcription_json)
+    async def fetch_sec_url_once(self, url, add_header=True, type='data'):
+        headers = {
+            'User-Agent': 'JustBuildIt admin@justbuildit.com',
+            'Accept-Encoding': 'gzip, deflate',
+            'Host': f'{type}.sec.gov'
+            }
+        if add_header:
+            response = requests.get(url, headers=headers)
+        else:
+            response = requests.get(url)
         
-    # for i in range(insert_count):
-    #     new_transcriptions = [f"{uuid.uuid4()}",f"{uuid.uuid4()}",f"{uuid.uuid4()}",f"{uuid.uuid4()}"]
-    #     response = fire.upsert_append_transcription(transcription_name, 'test_transcriptions', new_transcriptions=new_transcriptions)
-    #     print(response)
-    
-    # for i in range(insert_count):
-    #     response = fire.insert_dictionary(fire.default_collection, fire.test_dictionary, None)
-    #     print(response)
-        
-        
-    # print(await fire.get_recent_dictionaries(fire.default_collection, 15))
-         
+        if response.status_code == 200:
+            return response
+        else:
+            st.write(f"url: {url}\nheaders: {headers}")
+            st.html(response.text)
+            raise Exception(f"Failed to fetch URL with status code {response.status_code}")
 
+    async def update_ticker_cik_map( self,db):
+        
+        # Get an updated version of the complete ticker - CIK map from the SEC
+        url = "https://www.sec.gov/files/company_tickers.json"
+        tickers = await db.fetch_sec_url_once(url, type='www')
+        ticker_dict = {}
+        if tickers.text and tickers.text != '':
+            ticker_dict = json.loads(tickers.text)
+        # Reverse the key to be the CIK instead of just an incrementing number
+        tickers = {}
+        # Use tqdm to wrap the ticker_dict for progress monitoring
+        for tick in tqdm(ticker_dict, desc="Processing Tickers", unit="ticker"):
+            cik_str = str(ticker_dict[tick].get('cik_str', '0'))
+            tickers[cik_str] = {
+                'ticker': ticker_dict[tick].get('ticker', ''),'company_title': ticker_dict[tick].get('title', '')}
+        
+        #Get the current security master
+        current_sm = await self.get_all_documents_from_collection('securitymaster')
+        
+        for unique_cik in tickers.keys():
+            if unique_cik not in current_sm.keys():
+                await self.insert_dictionary('securitymaster', tickers[cik_str], cik_str)
+        
+        CIK_to_Ticker_Map = await self.get_all_documents_from_collection('securitymaster')
+        
+        return CIK_to_Ticker_Map
+            
+    async def update_ticker_reference_data(self, db, CIK_to_Ticker_Map):
 
-# asyncio.run(test_class(3))
+        # Use tqdm to iterate through the CIKs in the map with a progress bar
+        for cik in tqdm(CIK_to_Ticker_Map.keys(), desc="Updating CIK-Ticker Reference Data", unit="CIK"): 
+            if CIK_to_Ticker_Map[cik].get('last_updated', '')== '':
+                try:
+                    url = f"https://data.sec.gov/submissions/CIK{str(cik).zfill(10)}.json"    
+                    last_submission = await db.fetch_sec_url_once(url, )
+                    last_submission_dict = json.loads(last_submission.text)
+                    last_submission_dict.pop('filings', None)
+                    last_submission_dict['last_updated'] = datetime.now().strftime("%Y-%m-%d %H:%M") 
+                    await db.upsert_merge(cik, 'securitymaster', last_submission_dict)
+                    time.sleep(1/8)
+                except Exception as e:
+                    st.write(f'Failed to update {CIK_to_Ticker_Map[cik]}')
+                    pass
+            
+if __name__ == '__main__':
+    import streamlit as st
+    from _class_streamlit import streamlit_mytech
+    stm = streamlit_mytech(theme='cfdark')
+    stm.set_up_page(page_title_text="Security Master (Public-Free Data)",
+        session_state_variables=[{"TransStatus": False}], )
+    
+    db = SecurityMasterStorage()
+
+    #Add new CIKs to the Ticker CIK Map
+    CIK_to_Ticker_Map = asyncio.run(db.update_ticker_cik_map(db))
+    asyncio.run(db.update_ticker_reference_data(db, CIK_to_Ticker_Map))
+    
+
+        
+        
+
+    
+    
+    

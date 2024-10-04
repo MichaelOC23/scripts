@@ -35,8 +35,8 @@ gatherUsageStats = false
 
 [theme]
 font = "sans serif"
-primaryColor = "#003366"
-backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F0F2F6"
-textColor = "#003366"
+primaryColor = "#98CCD0"
+backgroundColor = "#003366"
+secondaryBackgroundColor = "#404040"
+textColor = "#CBD9DF"
 base = "light"

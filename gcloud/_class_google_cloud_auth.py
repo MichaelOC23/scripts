@@ -14,13 +14,13 @@ import extra_streamlit_components as stx
 
 class Authenticate:
     def __init__(self, secret_credentials_path:str, redirect_uri: str, cookie_name: str, cookie_key: str, cookie_expiry_days: float=30.0):
-        st.session_state['IS_AUTHENTICATED_TO_GOOGLE']   =   st.session_state.get('IS_AUTHENTICATED_TO_GOOGLE', False) 
+        st.session_state['IS_AUTHENTICATED_TO_GOOGLE']   =   st.session_state.get('IS_AUTHENTICATED_TO_GOOGLE', False)
         self.secret_credentials_path    =   secret_credentials_path
         self.redirect_uri               =   redirect_uri
         self.cookie_handler             =   CookieHandler(cookie_name,
                                                           cookie_key,
                                                           cookie_expiry_days)
-        
+
     def get_authorization_url(self) -> str:
         flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
             self.secret_credentials_path, # replace with you json credentials from your google auth app
@@ -79,7 +79,7 @@ class Authenticate:
             else:
                 print('No token found, redirecting to Google')
 
-            
+
             time.sleep(0.3)
             
             if not st.session_state['IS_AUTHENTICATED_TO_GOOGLE']:
@@ -109,7 +109,7 @@ class Authenticate:
                     st.rerun()
         else:
             return True
-    
+
     def logout(self):
         st.session_state['logout'] = True
         st.session_state['name'] = None
@@ -133,7 +133,7 @@ class CookieHandler:
         cookie_key: str
             Key to be used to hash the signature of the re-authentication cookie.
         cookie_expiry_days: float
-            Number of days before the re-authentication cookie automatically expires on the client's 
+            Number of days before the re-authentication cookie automatically expires on the client's
             browser.
         """
         self.cookie_name            =   cookie_name
@@ -160,7 +160,7 @@ class CookieHandler:
             if (self.token is not False and 'email' in self.token.keys() and
                 self.token['exp_date'] > datetime.now().timestamp()):
                 return self.token
-            
+
     def delete_cookie(self):
         """
         Deletes the re-authentication cookie.
@@ -178,7 +178,7 @@ class CookieHandler:
         token = self._token_encode(name, email, picture, oauth_id)
         self.cookie_manager.set(self.cookie_name, token,
                                 expires_at=datetime.now() + timedelta(days=self.cookie_expiry_days))
-        
+
     def _set_exp_date(self) -> str:
         """
         Sets the re-authentication cookie's expiry date.
@@ -189,7 +189,7 @@ class CookieHandler:
             re-authentication cookie's expiry timestamp in Unix Epoch.
         """
         return (datetime.now() + timedelta(days=self.cookie_expiry_days)).timestamp()
-    
+
     def _token_decode(self) -> str:
         """
         Decodes the contents of the re-authentication cookie.
@@ -207,7 +207,7 @@ class CookieHandler:
         except DecodeError as e:
             print(e)
             return False
-        
+
     def _token_encode(self, name : str, email: str, picture: str, oauth_id: str) -> str:
         """
         Encodes the contents of the re-authentication cookie.
@@ -219,3 +219,4 @@ class CookieHandler:
         """
         return jwt.encode({'email': email, 'name': name, 'picture': picture, 'oauth_id': oauth_id,
             'exp_date': self.exp_date}, self.cookie_key, algorithm='HS256')
+

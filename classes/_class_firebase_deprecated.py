@@ -9,12 +9,6 @@ import json
 from datetime import datetime, timezone
 
 
-
-# Initialize Firebase app (if not already done)
-
-
-
-
 class FirestoreStorage:
     def __init__(self):
         self.db = firestore.Client()
@@ -321,26 +315,3 @@ class FirestoreStorage:
 # Example usage
 # image_url = upload_file("path/to/local/image.jpg", "images/profile_pic.jpg")
 
-
-async def test_class(insert_count):
-    fire = FirestoreStorage()
-    
-    transcription_name = f"{uuid.uuid4()}"
-    
-    await fire.upload_folder_of_json_files_to_cloud_storage("/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes By Michael/Transcriptions/.trans_json", fire.original_transcription_json)
-        
-    # for i in range(insert_count):
-    #     new_transcriptions = [f"{uuid.uuid4()}",f"{uuid.uuid4()}",f"{uuid.uuid4()}",f"{uuid.uuid4()}"]
-    #     response = fire.upsert_append_transcription(transcription_name, 'test_transcriptions', new_transcriptions=new_transcriptions)
-    #     print(response)
-    
-    # for i in range(insert_count):
-    #     response = fire.insert_dictionary(fire.default_collection, fire.test_dictionary, None)
-    #     print(response)
-        
-        
-    # print(await fire.get_recent_dictionaries(fire.default_collection, 15))
-         
-
-
-# asyncio.run(test_class(3))

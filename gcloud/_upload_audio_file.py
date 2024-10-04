@@ -10,14 +10,7 @@ from datetime import datetime, timezone
 from google.cloud import secretmanager
 
 
-
-
-# Initialize Firebase app (if not already done)
-
-
-
-
-class FirestoreStorage:
+class FB_Audio_Upload:
     def __init__(self):
         self.db = firestore.Client()
         self.test_dictionary = {'name': 'Jane Doe','email': 'janedoe@example.com','age': 28, "createdon": datetime.now()}
@@ -183,9 +176,9 @@ class FirestoreStorage:
 
         return blob.public_url  # Get the public download URL
     
-    async def upload_folder_of_json_files_to_cloud_storage(self, folder_path, container=None):
+    async def upload_file_and_create_reference(self, filepath, container=None):
         # Confirm that the folder path is a valid path
-        if not os.path.isdir(folder_path):
+        if not os.path.isfile(filepath):
             raise ValueError("Invalid folder path provided.")
         
         # Check if a container is provided; if not, use a default one.
@@ -344,29 +337,3 @@ class FirestoreStorage:
         except Exception as e:
             print(f"Error downloading blob: {e}")
 
-# Example usage
-# image_url = upload_file("path/to/local/image.jpg", "images/profile_pic.jpg")
-
-
-async def test_class(insert_count):
-    fire = FirestoreStorage()
-    
-    transcription_name = f"{uuid.uuid4()}"
-    
-    await fire.upload_folder_of_json_files_to_cloud_storage("/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes By Michael/Transcriptions/.trans_json", fire.original_transcription_json)
-        
-    # for i in range(insert_count):
-    #     new_transcriptions = [f"{uuid.uuid4()}",f"{uuid.uuid4()}",f"{uuid.uuid4()}",f"{uuid.uuid4()}"]
-    #     response = fire.upsert_append_transcription(transcription_name, 'test_transcriptions', new_transcriptions=new_transcriptions)
-    #     print(response)
-    
-    # for i in range(insert_count):
-    #     response = fire.insert_dictionary(fire.default_collection, fire.test_dictionary, None)
-    #     print(response)
-        
-        
-    # print(await fire.get_recent_dictionaries(fire.default_collection, 15))
-         
-
-
-# asyncio.run(test_class(3))

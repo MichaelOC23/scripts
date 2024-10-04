@@ -239,7 +239,7 @@ option6() {
     xcode-select --install
 
     # Install or upgrade packages and casks
-    install_or_upgrade docker
+    install_or_upgrade_cask docker
     install_or_upgrade github
 
     # Install node and verify
@@ -266,6 +266,8 @@ option6() {
     install_or_upgrade tesseract
     install_or_upgrade portaudio
     install_or_upgrade ffmpeg
+    install_or_upgrade gnu-sed
+    install_or_upgrade wget
 
     install_or_upgrade_cask google-cloud-sdk
     gcloud auth login

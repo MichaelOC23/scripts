@@ -142,6 +142,7 @@ nats-py
 
 ### Cloud Services
 google-api-python-client
+msal
 # azure-identity
 # azure-cognitiveservices-speech
 

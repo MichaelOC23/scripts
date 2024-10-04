@@ -52,10 +52,6 @@ class streamlit_mytech():
             }
         
         
-        
-        
-        
-        
         self.model_dict = MODEL_DICT
         self.setup_database = False
         self.font = themes.get(theme, {}).get('font', '')
@@ -68,6 +64,8 @@ class streamlit_mytech():
         self.home_config_file_path = f'{self.home_dir}/.streamlit/config.toml'
         self.working_config_file_path = f'.streamlit/config.toml'
         self.master_config_file_path = f'{self.home_dir}/code/scripts/.streamlit/master_streamlit_config.toml'    
+        
+        self.oauth_credential_key = 'COMMUNIFY_HORIZONS_OAUTH_2_CREDENTIAL'
  
 
     def create_google_secret(self, secret_id, secret_value, project_id='toolsexplorationfirebase'):
@@ -129,17 +127,17 @@ class streamlit_mytech():
     
     def get_google_oauth_credentials(self):
         # Return credentials or initialize session_state placeholder
-        if 'GOOGLE_OAUTH_CREDENTIALS' not in st.session_state: 
-            st.session_state["GOOGLE_OAUTH_CREDENTIALS"] = {}
+        if self.oauth_credential_key not in st.session_state: 
+            st.session_state[self.oauth_credential_key] = {}
         
-        if st.session_state['GOOGLE_OAUTH_CREDENTIALS'] != {}:
-            return st.session_state['GOOGLE_OAUTH_CREDENTIALS']
+        if st.session_state[self.oauth_credential_key] != {}:
+            return st.session_state[self.oauth_credential_key]
         
         # Get Google OAuth Credentials
-        cred_json = self.get_google_secret('DATASCIENCETOOLS_CLIENT_OAUTH_JSON')
+        cred_json = self.get_google_secret(self.oauth_credential_key)
         cred_dict = json.loads(cred_json)
-        st.session_state["GOOGLE_OAUTH_CREDENTIALS"] = cred_dict
-        return st.session_state["GOOGLE_OAUTH_CREDENTIALS"]
+        st.session_state[self.oauth_credential_key] = cred_dict
+        return st.session_state[self.oauth_credential_key]
         
     def set_up_page(self, page_title_text=None, 
                     logo_url=None, 
@@ -163,6 +161,10 @@ class streamlit_mytech():
         st.set_page_config(
             page_title=self.page_title, page_icon=":earth_americas:", layout="wide", initial_sidebar_state=initial_sidebar_state,
             menu_items={'Get Help': 'mailto:michael@communify.com','Report a bug': 'mailto:michael@communify.com',})           
+        
+        st.title(f":blue[{self.page_title}]")
+        st.divider()
+        st.logo(f"{self.logo_url}")
 
     def establish_authentication(self,advanced_menu=False, google_auth=False):
         if advanced_menu:

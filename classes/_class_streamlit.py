@@ -100,6 +100,8 @@ class streamlit_mytech():
         self.home_config_file_path = f'{self.home_dir}/.streamlit/config.toml'
         self.working_config_file_path = f'.streamlit/config.toml'
         self.master_config_file_path = f'{self.home_dir}/code/scripts/.streamlit/master_streamlit_config.toml'
+        
+        self.oauth2_credential = 'COMMUNIFY_HORIZONS_OAUTH_2_CREDENTIAL'
 
         self.set_theme()
     

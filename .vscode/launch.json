@@ -27,7 +27,7 @@
       "type": "debugpy",
       "request": "launch",
       "module": "streamlit",
-      "args": ["run", "${file}"],
+      "args": ["run", "${file}", "--server.port", "5011"],
       "justMyCode": true,
       "console": "integratedTerminal"
     },
