@@ -1,6 +1,7 @@
 import msal
 import requests
 import os
+import streamlit as st
 from datetime import datetime, timedelta, timezone
 
 class MS_GraphAPI_Calendar:
@@ -19,8 +20,11 @@ class MS_GraphAPI_Calendar:
         self.SCOPE = ['https://graph.microsoft.com/.default']  # For app permissions
         self.AUTHORITY       = f'https://login.microsoftonline.com/{self.AZURE_COMMUNIFY_TENANT_ID}'
         self.GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0'
+        self.log = []
         
-    
+    def logit(self, log_mession):
+        self.log.append(log_mession)
+        
     def authenticate(self,):
         app = msal.ConfidentialClientApplication(
             self.AZURE_COMMUNIFY_CLIENT_ID,
@@ -80,7 +84,7 @@ class MS_GraphAPI_Calendar:
         
         # Check for HTTP errors
         if response.status_code != 200:
-            print(f"Error fetching inbox emails: {response.status_code} - {response.text}")
+            self.logit(f"Error fetching inbox emails: {response.status_code} - {response.text}")
             response.raise_for_status()
         
         return response.json().get('value', [])
@@ -88,7 +92,7 @@ class MS_GraphAPI_Calendar:
     # Check if the email is a meeting invite based on meetingMessageType
     def is_meeting_invite(self,email):
         meeting_message_type = email.get('meetingMessageType', 'No Meeting Message Type')
-        print(f"Meeting Message Type: {meeting_message_type}")
+        self.logit(f"Meeting Message Type: {meeting_message_type}")
         if meeting_message_type and meeting_message_type == 'meetingRequest':
             return True
         return False
@@ -108,10 +112,10 @@ class MS_GraphAPI_Calendar:
             if event_data:
                 return event_data['id']  # This is the event ID we need
             else:
-                print("No event data found in the message.")
+                self.logit("No event data found in the message.")
                 return None
         else:
-            print(f"Error fetching message details: {response.status_code} - {response.text}")
+            self.logit(f"Error fetching message details: {response.status_code} - {response.text}")
             return None
 
     def get_event_id_from_calendar(self,access_token, AZURE_COMMUNIFY_USER_ID, message_id, subject, start_datetime):
@@ -152,13 +156,13 @@ class MS_GraphAPI_Calendar:
             # Search for the event with a matching subject
             for event in events:
                 if event.get('subject') == subject:
-                    print(f"Found matching event in calendar: {event.get('id')}")
+                    self.logit(f"Found matching event in calendar: {event.get('id')}")
                     return event['id']
             else:
-                print(f"No calendar event found with subject: {subject}")
+                self.logit(f"No calendar event found with subject: {subject}")
                 return None
         else:
-            print(f"Error fetching calendar view: {response.status_code} - {response.text}")
+            self.logit(f"Error fetching calendar view: {response.status_code} - {response.text}")
             return None
 
     # Accept the meeting invite using the event ID
@@ -175,11 +179,10 @@ class MS_GraphAPI_Calendar:
         
         response = requests.post(accept_url, headers=headers, json=data)
         if response.status_code != 202:  # 202 Accepted is the expected response
-            print(f"Error accepting meeting: {response.status_code} - {response.text}")
+            self.logit(f"Error accepting meeting: {response.status_code} - {response.text}")
             response.raise_for_status()
         else:
-            print(f"Successfully accepted the meeting invite with Message ID: {event_id}")
-
+            self.logit(f"Successfully accepted the meeting invite with Message ID: {event_id}")
 
     def archive_invite_email(self,access_token, AZURE_COMMUNIFY_USER_ID, message_id, target_folder_id='archive'):
         headers = {'Authorization': f'Bearer {access_token}'}
@@ -196,14 +199,12 @@ class MS_GraphAPI_Calendar:
         response = requests.post(move_url, headers=headers, json=data)
         
         if response.status_code != 201:  # 201 Created indicates success for move operations
-            print(f"Error moving email: {response.status_code} - {response.text}")
+            self.logit(f"Error moving email: {response.status_code} - {response.text}")
         else:
-            print("Successfully archived the invite email.")
-
-
+            self.logit("Successfully archived the invite email.")
 
     # Main logic to process meeting invites
-    def process_meeting_invites(self, user_id):
+    def process_meeting_invites(self):
         access_token = self.authenticate()
         ranges = self.TIME_RANGES
         
@@ -214,7 +215,7 @@ class MS_GraphAPI_Calendar:
                 from_address = email.get('from', {}).get('emailAddress', {}).get('address', 'Not A Valid From Address')
                 # if any of the string in the self.INTERNAL_DOMAINS list are in the from address, then it's an internal email
                 if not any([i in from_address for i in self.INTERNAL_DOMAINS]):
-                    print(f"Ignoring email from {from_address} as it's not an internal email.")
+                    self.logit(f"Ignoring email from {from_address} as it's not an internal email.")
                     continue
 
                 subject = email.get('subject')
@@ -223,10 +224,10 @@ class MS_GraphAPI_Calendar:
                 
                 # Check if the email is a meeting invite
                 if email.get('meetingMessageType', None):
-                    print(f"{email.get('meetingMessageType', '')}")
+                    self.logit(f"{email.get('meetingMessageType', '')}")
                     if email.get('meetingMessageType', '')  == 'meetingRequest':
                         start_datetime = email.get('startDateTime').get('dateTime')
-                        print(start_datetime)
+                        self.logit(start_datetime)
                         if start_datetime and isinstance(start_datetime, str):  # Check for valid string
                             if '.' in start_datetime:
                                 date_part, microsecond_part = start_datetime.split('.')
@@ -242,18 +243,17 @@ class MS_GraphAPI_Calendar:
                             # Accept the meeting invite using the message ID
                             self.accept_meeting(access_token, self.AZURE_COMMUNIFY_USER_ID, event_id)
                         except Exception as e:
-                            print(f"Error ACCEPTING meeting invite: {e}")
+                            self.logit(f"Error ACCEPTING meeting invite: {e}")
                         try:
                             self.archive_invite_email(access_token, self.AZURE_COMMUNIFY_USER_ID, message_id)
                         except Exception as e:
-                            print(f"Error ARCHIVING meeting invite: {e}")
+                            self.logit(f"Error ARCHIVING meeting invite: {e}")
                         
-                            
                 else:
-                    print(f"Skipping non-meeting email: {subject}")
-
-
+                    self.logit(f"Skipping non-meeting email: {subject}")
+        return self.log
 
 if __name__ == '__main__':
-    MSGraph = MS_GraphAPI_Calendar()
-    MSGraph.process_meeting_invites('michael@communify.com')
+        pass
+    # MSGraph = MS_GraphAPI_Calendar()
+    # MSGraph.process_meeting_invites()

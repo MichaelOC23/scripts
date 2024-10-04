@@ -215,8 +215,7 @@ class streamlit_mytech():
                     authenticator.logout()
                 return
                     
-        
-        st.write(f"You are not authorized to access this site.")
+    
         authenticator.logout()
         st.stop()
             
