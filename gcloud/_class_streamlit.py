@@ -172,9 +172,10 @@ class streamlit_mytech():
             nav = navigation_streamlit()
             if nav.check_if_authenticated(): 
                 print('The current user is authenticated.')
-                pg = st.navigation(nav.menu)
-                pg.run()
-        
+                if nav.menu:
+                    pg = st.navigation(nav.menu)
+                    pg.run()
+            
         
         if not google_auth:
             st.logo(self.logo_icon_url, icon_image=self.logo_url)
