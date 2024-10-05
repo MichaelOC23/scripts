@@ -4,6 +4,8 @@ from google.cloud import firestore
 import pandas as pd
 import uuid
 import os
+import io
+
 import asyncio
 import json
 from datetime import datetime, timezone
@@ -18,10 +20,10 @@ from google.cloud import secretmanager
 
 
 class FirestoreStorage:
-    def __init__(self):
+    def __init__(self, default_collection='original_json_transcription', default_bucket='toolstorage'):
         self.db = firestore.Client()
         self.test_dictionary = {'name': 'Jane Doe','email': 'janedoe@example.com','age': 28, "createdon": datetime.now()}
-        self.default_collection = "original_json_transcription"
+        self.default_collection = default_collection
         self.cred_dict = {}
         if not firebase_admin._apps:
             cred_json = self.access_secret_version("GOOGLE_FIREBASE_ADMIN_JSON_CREDENTIAL_TOOLSEXPLORATION")
@@ -29,13 +31,13 @@ class FirestoreStorage:
             self.cred_dict = json.loads(cred_json)
             # Pass the dictionary to the Firebase credentials.Certificate() method
             self.cred = credentials.Certificate(self.cred_dict)
-            firebase_admin.initialize_app(self.cred, {'storageBucket': 'toolstorage'})
+            firebase_admin.initialize_app(self.cred, {'storageBucket': default_bucket})
         
         #Containers
-        self.original_transcription_json = "original_json_transcription"
+        self.original_transcription_json = default_collection
         
         # Initialize Storage Bucket
-        self.bucket = storage.bucket()
+        self.bucket = storage.bucket(default_bucket)
         
     
     def access_secret_version(self, secret_id, project_id='toolsexplorationfirebase',  version_id="latest"):
@@ -168,6 +170,20 @@ class FirestoreStorage:
             documents.append(doc.to_dict())
 
         return documents
+    
+    async def upload_image_from_object(self, image_object, destination_blob_name):
+
+        # Convert the image object to bytes (e.g., PNG or JPEG format)
+        img_byte_arr = io.BytesIO()
+        image_object.save(img_byte_arr, format='PNG')  # You can also use 'JPEG', etc.
+        img_byte_arr = img_byte_arr.getvalue()
+
+        # Upload the image bytes to Firebase Storage
+        blob = self.bucket.blob(destination_blob_name)
+        blob.upload_from_string(img_byte_arr, content_type='image/png')  # Adjust the content_type as needed
+
+        # Return the public URL or the storage path
+        return blob.public_url
     
     async def upload_file(self, file_path, destination_blob_name=None):
 

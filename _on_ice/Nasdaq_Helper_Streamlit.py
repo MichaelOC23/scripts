@@ -11,7 +11,6 @@ import requests
 import os
 
 from streamlit.elements import text
-# nasdaqdatalink.ApiConfig.api_key = 6X82a45M1zJPu2ci4TJP
 
 def initialize_session_state_variable(variable_name, variable_value):
         if variable_name not in st.session_state:

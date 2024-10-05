@@ -9,7 +9,6 @@ import datetime
 import requests
 # import classes._class_streamlit as cs
 import os
-# nasdaqdatalink.ApiConfig.api_key = 6X82a45M1zJPu2ci4TJP
 
 # cs.set_up_page(page_title_text="Nasdaq Market Data", jbi_or_cfy="jbi", light_or_dark="dark", connect_to_dj=False)
 

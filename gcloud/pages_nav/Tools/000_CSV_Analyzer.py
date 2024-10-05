@@ -17,22 +17,13 @@ def main():
                         {"DF_OF_CSV": None},
                         {"COLUMN_LIST": []},
                         {"UNIQUE_COLUMN_LIST": []},
-                        {"SELECTED_KEY": ''},
-                                            
-                                            ], )
-    
-    
+                        {"SELECTED_KEY": ''},], )
     
     # File uploader
     uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
-    
     if uploaded_file is not None:
-        
         analyze_csv(uploaded_file)
         
-        
-
-
 def analyze_csv(csv_path):
     progress_bar = st.progress(0)
     mc1, mc2, mc3, mc4, mc5, mc6 = st.columns([1,1,1,1,1,1])
@@ -234,9 +225,6 @@ def detect_encoding(uploaded_file):
     if result['encoding'] == 'ascii':
         return 'utf-8'
     return result['encoding']
-
-
-
 
 main()
 if __name__ == "__main__":
