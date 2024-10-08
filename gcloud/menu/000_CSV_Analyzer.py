@@ -1,24 +1,18 @@
 import streamlit as st
+# from _class_streamlit import streamlit_mytech   
+# stm = streamlit_mytech("CSV to Dictionary Converter/Loader", session_state_variables=[
+#                     {"DF_OF_CSV": None},
+#                     {"COLUMN_LIST": []},
+#                     {"UNIQUE_COLUMN_LIST": []},
+#                     {"SELECTED_KEY": ''},], auth=True)
+
 import pandas as pd
-import os
-import csv
 import re
-from _class_streamlit import streamlit_mytech
 import chardet
-from decimal import Decimal
 
 
 
 def main():
-    
-    stm = streamlit_mytech(theme='cfdark')
-    stm.set_up_page(page_title_text="CSV to Dictionary Converter/Loader",
-                    session_state_variables=[
-                        {"DF_OF_CSV": None},
-                        {"COLUMN_LIST": []},
-                        {"UNIQUE_COLUMN_LIST": []},
-                        {"SELECTED_KEY": ''},], )
-    
     # File uploader
     uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
     if uploaded_file is not None:

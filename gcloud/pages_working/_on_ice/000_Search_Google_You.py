@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from openai import chat
 from langchain.retrievers.you import YouRetriever
 import asyncio
-from classes.MyTechBackground import scrape
+# from classes.MyTechBackground import scrape
 import classes._class_search_web as sw
 import classes._class_ollama as ol
 import classes._class_streamlit as cs
@@ -90,9 +90,7 @@ def format_for_search():
     company="HUTNER CAPITAL MANAGEMENT INC."
     location="MANCHESTER, VT"
     url="HTTPS://WWW.HUTNERCAPITAL.COM"
-    
-    
-    
+     
 Titles_List = [
     # "Founder",
     # "Managing Partner",
@@ -116,8 +114,6 @@ Titles_List = [
     # "Regional Managing Director",
     "Principal"
 ]
-    
-
 Test_Companies = [
     # {"Company":"", "Location":""},
     # {"Company":"", "Location":""},
@@ -308,7 +304,6 @@ def format_search_execution():
     
     st.session_state['MODE'] = 'REVIEW_SEARCH_RESULTS'
         
-
 def format_for_review():
     pass
     st.write(st.session_state["SEARCH_RESULTS"])

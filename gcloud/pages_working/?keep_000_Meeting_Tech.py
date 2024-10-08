@@ -3,7 +3,6 @@ from openai import audio
 import streamlit as st
 import os
 import asyncio
-from pytube import YouTube
 import uuid
 
 

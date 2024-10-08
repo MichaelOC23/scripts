@@ -3,10 +3,19 @@ import requests
 import os
 import streamlit as st
 from datetime import datetime, timedelta, timezone
+from google.cloud import secretmanager
 
-class MS_GraphAPI_Calendar:
+class MS_GraphAPI:
     def __init__(self):
         # Constants - Replace with your values
+        
+        self.secret_client = secretmanager.SecretManagerServiceClient()
+        
+        secrets = ['AZURE_COMMUNIFY_TENANT_ID', 'AZURE_COMMUNIFY_CLIENT_ID', 'AZURE_COMMUNIFY_CLIENT_SECRET', 'AZURE_COMMUNIFY_USER_ID']
+        for secret in secrets:
+            if secret not in st.session_state:
+                self.access_secret_version(secret) 
+                
         self.AZURE_COMMUNIFY_TENANT_ID          = self.access_secret_version('AZURE_COMMUNIFY_TENANT_ID') 
         self.AZURE_COMMUNIFY_CLIENT_ID          = self.access_secret_version('AZURE_COMMUNIFY_CLIENT_ID') 
         self.AZURE_COMMUNIFY_CLIENT_SECRET      = self.access_secret_version('AZURE_COMMUNIFY_CLIENT_SECRET') 
@@ -39,24 +48,31 @@ class MS_GraphAPI_Calendar:
             raise Exception("Authentication failed.")
 
     def access_secret_version(self, secret_id, project_id='toolsexplorationfirebase',  version_id="latest"):
-            from google.cloud import secretmanager
-            secret_payload = ''
-            try:
-                # Create the Secret Manager client
-                client = secretmanager.SecretManagerServiceClient()
-
-                # Build the resource name of the secret version
-                name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
-
-                # Access the secret version
-                response = client.access_secret_version(request={"name": name})
-
-                # Decode the secret payload and return it
-                secret_payload = response.payload.data.decode("UTF-8")
-                
-            except:
-                secret_payload = os.environ.get(secret_id, '')
             
+
+            secret_payload = os.environ.get(secret_id, None)
+            
+            if not secret_payload:
+                secret_payload = st.session_state.get(secret_id, None)
+            
+            if not secret_payload:
+                try:
+
+
+                    # Build the resource name of the secret version
+                    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+
+                    # Access the secret version
+                    response = self.secret_client.access_secret_version(request={"name": name})
+
+                    # Decode the secret payload and return it
+                    secret_payload = response.payload.data.decode("UTF-8")
+                    
+                    st.session_state[secret_id] = secret_payload
+                
+                except:
+                    pass
+                
             return secret_payload
 
     def get_recent_emails_from_inbox(self,access_token, AZURE_COMMUNIFY_USER_ID, days_ago_start=0, days_ago_end=30):
@@ -255,5 +271,5 @@ class MS_GraphAPI_Calendar:
 
 if __name__ == '__main__':
         pass
-    # MSGraph = MS_GraphAPI_Calendar()
+    # MSGraph = MS_GraphAPI()
     # MSGraph.process_meeting_invites()

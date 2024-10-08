@@ -1,7 +1,7 @@
 # Standard Python Libraries
 import os
 import streamlit as st
-from _class_streamlit import streamlit_mytech
+# from _class_streamlit import streamlit_mytech
 from _class_firebase import FirestoreStorage
 
 import uuid
@@ -424,10 +424,10 @@ class TextExtractor:
         
 async def main():
 
-    stm = streamlit_mytech(theme='cfdark')
+    # stm = streamlit_mytech(theme='cfdark')
     ext = TextExtractor()
-    stm.set_up_page(page_title_text="PDF Uploader",
-                    session_state_variables=[], )
+    # stm.set_up_page(page_title_text="PDF Uploader",
+    #                 session_state_variables=[], )
 
     # File uploader
     if 'processed' not in st.session_state:

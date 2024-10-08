@@ -1,11 +1,9 @@
-
 #!/bin/bash
 
 clear
 
-DNAME="scripts"
-DPATH="${HOME}/code/streamlit_gcloud_main"
-DPORT=40010
+DNAME="gcloud"
+DNAME_REQ=".${DNAME}"
 
 # Color Variables for text
 GREEN='\033[0;32m'
@@ -76,7 +74,7 @@ dev_env_setup() {
     echo -e "\033[1;32mActivated virtual environment successfully\033[0m"
 
     # Get the path of the requirements file
-    REQUIREMENTS_FILE="${SCRIPT_DIR}/requirements.${DNAME}.txt"
+    REQUIREMENTS_FILE="${SCRIPT_DIR}/requirements${DNAME_REQ}.txt"
     echo "Requirements file: $REQUIREMENTS_FILE"
 
     # Upgrade pip

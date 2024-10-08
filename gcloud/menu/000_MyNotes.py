@@ -4,9 +4,9 @@ import random
 
 
 from _class_streamlit import streamlit_mytech
-stm = streamlit_mytech(theme='cfdark')
-stm.set_up_page(page_title_text="Meetings",
-                session_state_variables=[{"TransStatus": False}], )
+# stm = streamlit_mytech(theme='cfdark')
+# stm.set_up_page(page_title_text="Meetings",
+#                 session_state_variables=[{"TransStatus": False}], )
 
 material_icons=['Save', 'Surfing', 'Sprint', 'Savings', 'Spa', 'Nightlife', 'Raven', 'Pets', 'Pool', 'Tibia', 'Skull']
 

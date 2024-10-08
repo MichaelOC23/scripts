@@ -2,63 +2,40 @@
 # Standard Python libraries
 import streamlit as st
 import os
-import json
 from pathlib import Path
-import google_auth_oauthlib.flow
-import time
-from googleapiclient.discovery import build
-from _class_google_cloud_auth import Authenticate, CookieHandler
+from _class_o365_communify import MS_GraphAPI
+import requests
+# from googleapiclient.discovery import build
+# from _class_google_cloud_auth import Authenticate, CookieHandler
+from msal import ConfidentialClientApplication
+# import grpc
+# import logging
+# grpc_logger = logging.getLogger('grpc')
+# grpc_logger.setLevel(logging.ERROR)
 
 import os
 
 
+nav_menu = {
+    "Home": [
+        ["000_CSV_Analyzer.py", "CSV Analyzer"],
+        ["000_Accept_Invites.py", "Meeting Invites" ],
+        ["000_Extract-Store_Text.py","Extract & Store Text"],
+        ["000_MyNotes.py","Meeting Notes"],
+        ]
+    }
 
-MODEL_DICT = {
-            "Finance": "nlpaueb/sec-bert-base", 
-            "General": "roberta-base",
-            "ChatGPT-3.5": "gpt-3.5-turbo",
-            "ChatGPT-4": "gpt-4-turbo",
-            
-            }
-
-user_list = ["michaelsmith9905",  "vincent", "yaelas", "walker", "noelle", "barb", "sarah"]
 
 ####################################
 ####       STREAMLIT CLASS      ####
 ####################################
 class streamlit_mytech():
-    def __init__(self, theme = 'cflight' ):
+    
+    def __init__(self, page_title="New Page", session_state_variables = [], initial_sidebar_state="expanded", logo_url=None, auth=False):
         
-        themes = {
-            'cflight':{
-                'primary':'#003366',
-                'background':'#FFFFFF',
-                'sidebar':'#F0F2F6',
-                'text':'#003366',
-                'logo_url':'https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cfyd.png',
-                'logo_icon_url': 'https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cficonlogo.png',
-                'font': 'sans serif'
-                },
-            'cfdark':{
-                'primary':'#98CCD0',
-                'background':'#003366',
-                'sidebar':'#404040',
-                'text':'#CBD9DF',
-                'logo_url':'https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cfyd.png',
-                'logo_icon_url': 'https://devcommunifypublic.blob.core.windows.net/devcommunifynews/cficonlogo.png',
-                'font': 'sans serif'
-                },
-            'otherdark':{}
-            }
-        
-        
-        self.model_dict = MODEL_DICT
-        self.setup_database = False
-        self.font = themes.get(theme, {}).get('font', '')
-        self.logo_url = themes.get(theme, {}).get('logo_url', '')
-        self.logo_icon_url = themes.get(theme, {}).get('logo_icon_url', '')
-        
-        self.page_title = "New Page"
+        self.logo_url = logo_url if logo_url is not None else "https://firebasestorage.googleapis.com/v0/b/digitalassets-cf/o/cflogo_white.png?alt=media&token=bec35cef-6b51-43e2-a49e-b72c8c0c52ce"
+        self.icon_url = "https://firebasestorage.googleapis.com/v0/b/digitalassets-cf/o/cficon_white.png?alt=media&token=56185e09-4637-490a-91e8-ed57c9411c08"
+        self.page_title = page_title
         
         self.home_dir = Path.home()
         self.home_config_file_path = f'{self.home_dir}/.streamlit/config.toml'
@@ -66,7 +43,19 @@ class streamlit_mytech():
         self.master_config_file_path = f'{self.home_dir}/code/scripts/.streamlit/master_streamlit_config.toml'    
         
         self.oauth_credential_key = 'COMMUNIFY_HORIZONS_OAUTH_2_CREDENTIAL'
- 
+        print('st init')
+        if auth:
+            print('st init auth')
+            self.o365 = MS_GraphAPI()
+            if st.session_state.get("authenticated", False):
+                pg = self.create_menu()
+                pg.run()
+            else: 
+                self.set_up_page(session_state_variables, initial_sidebar_state)
+                self.login_ui()
+                # page = st.Page(page=self.login_ui(), title='Home')
+                # pg = st.navigation([page])
+                # pg.run()
 
     def create_google_secret(self, secret_id, secret_value, project_id='toolsexplorationfirebase'):
         
@@ -115,7 +104,7 @@ class streamlit_mytech():
             name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
 
             # Access the secret version
-            response = client.access_secret_version(request={"name": name})
+            response    = client.access_secret_version(request={"name": name})
 
             # Decode the secret payload and return it
             secret_payload = response.payload.data.decode("UTF-8")
@@ -124,34 +113,14 @@ class streamlit_mytech():
             secret_payload = os.environ.get(secret_id, '')
         
         return secret_payload
-    
-    def get_google_oauth_credentials(self):
-        # Return credentials or initialize session_state placeholder
-        if self.oauth_credential_key not in st.session_state: 
-            st.session_state[self.oauth_credential_key] = {}
         
-        if st.session_state[self.oauth_credential_key] != {}:
-            return st.session_state[self.oauth_credential_key]
-        
-        # Get Google OAuth Credentials
-        cred_json = self.get_google_secret(self.oauth_credential_key)
-        cred_dict = json.loads(cred_json)
-        st.session_state[self.oauth_credential_key] = cred_dict
-        return st.session_state[self.oauth_credential_key]
-        
-    def set_up_page(self, page_title_text=None, 
-                    logo_url=None, 
-                    session_state_variables=[], 
+    def set_up_page(self, session_state_variables=[], 
                     initial_sidebar_state="expanded"):
-        
+        print ("st set up page")
         def initialize_session_state_variable(variable_name, variable_value):
             if variable_name not in st.session_state:
                 st.session_state[variable_name] = variable_value
         
-        # Page Title and Logo
-        self.page_title = page_title_text if page_title_text is not None else self.page_title
-        self.logo_url = logo_url if logo_url is not None else self.logo_url
-            
             
         for variable in session_state_variables:
             if isinstance(variable, dict):
@@ -163,68 +132,75 @@ class streamlit_mytech():
             menu_items={'Get Help': 'mailto:michael@communify.com','Report a bug': 'mailto:michael@communify.com',})           
         
         st.title(f":blue[{self.page_title}]")
-        st.divider()
-        st.logo(f"{self.logo_url}")
+        st.logo( f"{self.logo_url}",size= "large",icon_image= f"{self.icon_url}")
 
-    def establish_authentication(self,advanced_menu=False, google_auth=False):
-        if advanced_menu:
-            from _class_streamlit_navigation import navigation_streamlit   
-            nav = navigation_streamlit()
-            if nav.check_if_authenticated(): 
-                print('The current user is authenticated.')
-                if nav.menu:
-                    pg = st.navigation(nav.menu)
-                    pg.run()
+    def get_redirect_uri(self):
+        uri='https://simpleappservice-236139179984.us-west2.run.app'
+        if os.path.exists("/Users/michasmi"):
+            uri = 'http://localhost:5010'
+        if os.path.exists("/app/app.py"):
+            uri = 'http://localhost:8080'
+        return uri
             
-        
-        if not google_auth:
-            st.logo(self.logo_icon_url, icon_image=self.logo_url)
-            st.header(f"{self.page_title}",divider=True)
+    def initialize_app(self):
+        authority_url = f"https://login.microsoftonline.com/{self.o365.AZURE_COMMUNIFY_TENANT_ID}"
+        return ConfidentialClientApplication(self.o365.AZURE_COMMUNIFY_CLIENT_ID, authority=authority_url, client_credential=self.o365.AZURE_COMMUNIFY_CLIENT_SECRET)
+
+    def acquire_access_token(self, app, code, scopes, redirect_uri):
+        return app.acquire_token_by_authorization_code(code, scopes=scopes, redirect_uri=redirect_uri)
+
+    def fetch_user_data(self, access_token):
+        headers = {"Authorization": f"Bearer {access_token}"}
+        graph_api_endpoint = "https://graph.microsoft.com/v1.0/me"
+        response = requests.get(graph_api_endpoint, headers=headers)
+        return response.json()
+
+    def authentication_process(self, app):
+        scopes = ["User.Read"]
+        redirect_uri = self.get_redirect_uri()
+        auth_url = app.get_authorization_request_url(scopes, redirect_uri=redirect_uri)
+        st.markdown(f"Please go to [this URL]({auth_url}) and authorize the app.")
+        if st.query_params.get("code"):
+            st.session_state["auth_code"] = st.query_params.get("code")
+            token_result = self.acquire_access_token(app, st.session_state.auth_code, scopes, redirect_uri)
+            if "access_token" in token_result:
+                user_data = self.fetch_user_data(token_result["access_token"])
+                return user_data
+            else:
+                st.error("Failed to acquire token. Please check your input and try again.")
+
+    def login_ui(self):
+        st.title("Microsoft Authentication")
+        app = self.initialize_app()
+        user_data = self.authentication_process(app)
+        if user_data:
+            print ('login check>authenticated')
+            st.write("Welcome, ", user_data.get("displayName"))
+            st.session_state["authenticated"] = True
+            st.session_state["display_name"] = user_data.get("displayName")
+            pg = self.create_menu()
+            pg.run()
             return
-        else:
-            uri='https://simpleappservice-236139179984.us-west2.run.app'
-            if os.path.exists("/Users/michasmi"):
-                uri = 'http://localhost:5010'
-            
-            cred_dict = self.get_google_oauth_credentials()
-            print(f'Obtained credential {cred_dict}')
-            
-            authenticator = Authenticate(
-                secret_credentials_path = cred_dict,
-                cookie_name='795ba442-577b-4231-98ca-aa2cc4845a83',
-                cookie_key='2330bacd-3495-4211-9899-5fa47ead6779',
-                redirect_uri=uri,
-            )
-            print ('Instantiated Authenticator')
-            
-            # Catch the login event
-            print ('Beginning confirm_google_authentication')
-            authenticator.confirm_google_authentication()
-            
-
-            # Create the login button
-            authenticator.login(cred_dict=cred_dict)
-
-            
-        # Display the user information and logout button if the user is authenticated
-        if st.session_state['IS_AUTHENTICATED_TO_GOOGLE'] and 'user_info' in st.session_state:
-            if any(substring in st.session_state['user_info'].get('email', '') for substring in user_list):
-                gpic, guser = st.sidebar.columns([1,4])
-                gpic.image(st.session_state['user_info'].get('picture'))
-                # guser.write(f"{st.session_state['user_info'].get('name')}\n{st.session_state['user_info'].get('email')}")
-                if guser.button(f"Sign Out: {st.session_state['user_info'].get('name')}", use_container_width=True):
-                    authenticator.logout()
-                return
-                    
+        print ('login check> not aut')
+        return
     
-        authenticator.logout()
-        st.stop()
-            
-            
-
+    def create_menu(self):
         
+        def create_page(menu_item):
+            # print(menu_item)
+            page = st.Page(page=f"menu/{menu_item[0]}", title=menu_item[1].strip())
+            return page
         
-
-
+        menu_dict = {}
+        
+        for  heading in nav_menu.keys():
+            for menu_item in nav_menu.get(heading):
+                page = create_page(menu_item)
+                if heading not in menu_dict:
+                    menu_dict[heading] = []
+                menu_dict[heading].append(page)
+        
+        pg = st.navigation(menu_dict)
+        return pg
 
 

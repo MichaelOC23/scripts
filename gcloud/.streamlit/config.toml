@@ -1,0 +1,42 @@
+[global]
+showWarningOnDirectExecution = true
+
+[logger]
+level = "info"
+messageFormat = "%(asctime)s %(message)s"
+
+[client]
+showErrorDetails = true
+toolbarMode = "developer"
+showSidebarNavigation = true
+
+[runner]
+magicEnabled = false
+fastReruns = true
+enforceSerializableSessionState = false
+enumCoercion = "nameOnly"
+
+[server]
+folderWatchBlacklist = []
+cookieSecret = "a-random-key-appears-here"
+headless = true
+runOnSave = true
+port = 5010
+enableCORS = true
+enableXsrfProtection = true
+maxUploadSize = 1000
+maxMessageSize = 1000
+enableWebsocketCompression = false
+enableStaticServing = false
+
+[browser]
+serverAddress = "localhost"
+gatherUsageStats = false
+
+[theme]
+font = "sans serif"
+primaryColor = "#98CCD0"
+backgroundColor = "#003366"
+secondaryBackgroundColor = "#404040"
+textColor = "#CBD9DF"
+base = "light"
