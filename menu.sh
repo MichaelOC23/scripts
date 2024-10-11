@@ -71,29 +71,29 @@ show_menu() {
     echo -e "${CYAN}12) Install/Upgrade Open Web UI  ${NC}"
     echo -e "${CYAN}13) Set Ollama Env Variables (one-time)  ${NC}"
     echo -e "${CYAN}14) Update Local Secrets from Google Cloud ${NC}"
-    echo -e "${MAGENTA}XX) Copy files by type (recursive)${NC} <.XXX> <from dir> <to dir> ${NC}"
-    echo -e "${MAGENTA}XX) Generate simple file list (recursive)${NC} <start dir> ${NC}"
-    echo -e "${MAGENTA}XX) Generate advanced file list (recursive)${NC} <start dir> ${NC}"
+    # echo -e "${MAGENTA}XX) Copy files by type (recursive)${NC} <.XXX> <from dir> <to dir> ${NC}"
+    # echo -e "${MAGENTA}XX) Generate simple file list (recursive)${NC} <start dir> ${NC}"
+    # echo -e "${MAGENTA}XX) Generate advanced file list (recursive)${NC} <start dir> ${NC}"
 
-    echo -e "\n${ORANGE}100) Remove and recreate the virtual environment ... ${NC}"
+    # echo -e "\n${ORANGE}100) Remove and recreate the virtual environment ... ${NC}"
 
     # echo -e "${MAGENTA}XX) OPEN MENU ${NC}"
     # echo -e "${MAGENTA}XX) OPEN MENU ${NC}"
     # echo -e "${MAGENTA}XX) OPEN MENU ${NC}"
     # echo -e "${MAGENTA}XX) OPEN MENU ${NC}"
 
-    echo -e "|-------------------------------------------------------------|${NC}\n"
-    echo -e "${LIGHTBLUE}\nTechy Tools${NC}"
-    echo -e "${LIGHTBLUE}>>> XXX) Script administration"
-    echo -e "${LIGHTBLUE}>>> XXX) Display color palette${NC}"
-    echo -e "${LIGHTBLUE}>>> XXX) Restart Postgres 14${NC}"
-    echo -e "${LIGHTBLUE}>>> XXX) Launch Postgres in Docker${NC}"
+    # echo -e "|-------------------------------------------------------------|${NC}\n"
+    # echo -e "${LIGHTBLUE}\nTechy Tools${NC}"
+    # echo -e "${LIGHTBLUE}>>> XXX) Script administration"
+    # echo -e "${LIGHTBLUE}>>> XXX) Display color palette${NC}"
+    # echo -e "${LIGHTBLUE}>>> XXX) Restart Postgres 14${NC}"
+    # echo -e "${LIGHTBLUE}>>> XXX) Launch Postgres in Docker${NC}"
 
-    echo -e "${LIGHTBLUE}>>> XXX) Kill all Python and Docker processes ${NC}"
-    echo -e "${LIGHTBLUE}>>> XXX) Create/replace .jbi symbolic links${NC}"
-    echo -e "${LIGHTBLUE}>>> XXX) Generate an encryption key${NC}"
-    echo -e "${LIGHTBLUE}>>> XXX) Deinitialize a Git repositories (recursive)${NC}"
-    echo -e "${LIGHTBLUE}>>> XXX) Grant terminal access to iCloud Drive${NC}"
+    # echo -e "${LIGHTBLUE}>>> XXX) Kill all Python and Docker processes ${NC}"
+    # echo -e "${LIGHTBLUE}>>> XXX) Create/replace .jbi symbolic links${NC}"
+    # echo -e "${LIGHTBLUE}>>> XXX) Generate an encryption key${NC}"
+    # echo -e "${LIGHTBLUE}>>> XXX) Deinitialize a Git repositories (recursive)${NC}"
+    # echo -e "${LIGHTBLUE}>>> XXX) Grant terminal access to iCloud Drive${NC}"
 
 }
 
@@ -244,6 +244,7 @@ read_choice() {
         launchctl setenv OLLAMA_MODELS "${OLLAMA_DATA}/models"
         launchctl setenv OLLAMA_CACHE_DIR "${OLLAMA_DATA}/cache"
         launchctl setenv OLLAMA_TMPDIR "${OLLAMA_TEMP}"
+        launchctl setenv OLLAMA_HOST "0.0.0.0"
         echo -e "Set Ollama Environment Variables"
 
         ;;
