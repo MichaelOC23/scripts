@@ -62,13 +62,15 @@ show_menu() {
     echo -e "${MAGENTA} 3) Start/Restart ListGen ${NC}"
     echo -e "${MAGENTA} 4) Extract and clean text from all PDFs (recursive)${CYAN} Gemini${NC} <start dir>  ${NC}"
     echo -e "${MAGENTA} 5) Summarize all clean text extracts (recursive)${CYAN} Gemini${NC} <start dir>  ${NC}"
-    echo -e "${MAGENTA} 6) WIP Combine summaries (Recursive){NC} <start dir> ${NC}"
-    echo -e "${MAGENTA} 7) Transcribe recordings in folder{NC} <start dir> ${NC}"
+    echo -e "${MAGENTA} 6) WIP Combine summaries (Recursive)${NC} <start dir> ${NC}"
+    echo -e "${MAGENTA} 7) Transcribe recordings in folder${NC} <start dir> ${NC}"
     echo -e "${MAGENTA} 8) Transcribe new Voicememos ${NC}"
     echo -e "${MAGENTA} 9) Kill all Python processes ${NC}"
     echo -e "${MAGENTA}10) Find duplicate folders (recursive)${NC} <start dir> or current dir${NC}"
     echo -e "${MAGENTA}11) Stop-Restart Postgres ${NC}"
-    echo -e "${MAGENTA}XX) Review transcriptions  ${NC}"
+    echo -e "${CYAN}12) Install/Upgrade Open Web UI  ${NC}"
+    echo -e "${CYAN}13) Set Ollama Env Variables (one-time)  ${NC}"
+    echo -e "${CYAN}14) Update Local Secrets from Google Cloud ${NC}"
     echo -e "${MAGENTA}XX) Copy files by type (recursive)${NC} <.XXX> <from dir> <to dir> ${NC}"
     echo -e "${MAGENTA}XX) Generate simple file list (recursive)${NC} <start dir> ${NC}"
     echo -e "${MAGENTA}XX) Generate advanced file list (recursive)${NC} <start dir> ${NC}"
@@ -170,6 +172,88 @@ read_choice() {
         echo "Postgres 14 restarted"
         exit 0
         ;;
+    12)
+        CONTAINER_NAME="open-webui"
+
+        LLM_DATA="${HOME}/data-llm"
+        OPENWEBUI_DATA="${LLM_DATA}/open-webui-data"
+        OPENWEBUI_PORT_MAPPING="3000:8080"
+        OPENWEBUI_VOLUME_MAPPING="${OPENWEBUI_DATA}:/app/backend/data"
+
+        # IMAGE_NAME="ghcr.io/open-webui/open-webui:main"  # The main image for Open WebUI
+        IMAGE_NAME="ghcr.io/open-webui/open-webui:main"
+
+        # Use --add-host to map host.docker.internal to the host gateway
+        HOST_OPTION="--add-host=host.docker.internal:host-gateway"
+
+        mkdir -p "${LLM_DATA}"
+        mkdir -p "${OPENWEBUI_DATA}"
+
+        install_or_upgrade_cask docker
+        install_or_upgrade_cask ollama
+
+        # Function to stop and remove the container if it exists
+        stop_and_remove_container() {
+            if docker ps -q -f name="$CONTAINER_NAME" >/dev/null; then
+                echo "Stopping running container: $CONTAINER_NAME"
+                docker stop "$CONTAINER_NAME"
+            fi
+
+            if docker ps -aq -f name="$CONTAINER_NAME" >/dev/null; then
+                echo "Removing existing container: $CONTAINER_NAME"
+                docker rm "$CONTAINER_NAME"
+            fi
+        }
+
+        # Function to pull the latest Docker image
+        pull_latest_image() {
+            echo "Pulling the latest image: $IMAGE_NAME"
+            docker pull "$IMAGE_NAME"
+        }
+
+        # Function to run the Docker container
+        run_container() {
+            docker run -d -p $OPENWEBUI_PORT_MAPPING \
+                $HOST_OPTION \
+                -v $OPENWEBUI_VOLUME_MAPPING \
+                --env OLLAMA_BASE_URL="http://host.docker.internal:11434" \
+                --name "$CONTAINER_NAME" \
+                --restart always \
+                "$IMAGE_NAME"
+        }
+
+        # Main script execution
+        echo "Checking for an existing container..."
+        stop_and_remove_container
+
+        echo "Checking for image updates..."
+        pull_latest_image
+
+        echo "Starting a new container..."
+        run_container
+
+        echo "Container setup complete."
+        exit 0
+        ;;
+    13)
+        #Set Ollama Env Variables (one time)
+        export LLM_DATA="${HOME}/data-llm"
+        export OLLAMA_DATA="${LLM_DATA}/ollama-data"
+        export OLLAMA_TEMP="${LLM_DATA}/temp" && mkdir -p "${OLLAMA_TEMP}"
+        launchctl setenv OLLAMA_HOME "${OLLAMA_DATA}"
+        launchctl setenv OLLAMA_MODELS "${OLLAMA_DATA}/models"
+        launchctl setenv OLLAMA_CACHE_DIR "${OLLAMA_DATA}/cache"
+        launchctl setenv OLLAMA_TMPDIR "${OLLAMA_TEMP}"
+        echo -e "Set Ollama Environment Variables"
+
+        ;;
+    14)
+        #Update Google Cloud Secrets
+        echo -e "Updating secrets from Google Cloud"
+        update_secrets_google_cloud
+        echo -e "Local secrets have been updated."
+        exit 0
+        ;;
 
     901)
         echo -e "Removing and recreating the virtual environment ..."
@@ -226,16 +310,6 @@ read_choice() {
         exit 0
         ;;
 
-    907)
-        echo "Start / Restart LLMs and Chat Apps"
-        cd "${COMMUNIFY_PATH}" && llm_launch.sh
-        exit 0
-        ;;
-    908)
-        echo "Shut Down LLMs and Chat Apps"
-        cd "${COMMUNIFY_PATH}" && llm_launch.sh stop
-        exit 0
-        ;;
     *)
         echo "Invalid choice. Exiting ..."
         exit 0
@@ -272,6 +346,15 @@ find_duplicate_folders() {
     python "${SCRIPT_PATH}/>find_duplicate_files2.py" "$folder_path"
 
 }
+
+update_secrets_google_cloud() {
+    folder_path=$(pwd)
+    start_scripts_venv # Start the Python Virtual Environment
+    python "${SCRIPT_PATH}/_100_update_secrets.py"
+
+}
+
+_100_update_secrets
 
 # Function to prompt the user and return a value or default to current directory
 get_input_or_default() {
@@ -314,7 +397,7 @@ start_listgen_venv() {
     echo -e "Python Virtual Environment started."
 }
 
-commit_mytech() { 
+commit_mytech() {
     echo -e "Committing and pushing MyTech ..."
     cd "${HOME}/code/mytech" || {echo "Error: '${HOME}/code/mytech' directory not found." exit 1
     commit_current_folder
@@ -452,6 +535,28 @@ venv_rm_and_recreate() {
 
     echo -e "\033[5;32mInstallation complete\033[0m"
 
+}
+
+# Function to install or upgrade Homebrew packages
+install_or_upgrade() {
+    if brew list --formula | grep -q "^$1\$"; then
+        echo "Upgrading $1..."
+        brew upgrade $1
+    else
+        echo "Installing $1..."
+        brew install $1
+    fi
+}
+
+# Function to install or upgrade Homebrew casks
+install_or_upgrade_cask() {
+    if brew list --cask | grep -q "^$1\$"; then
+        echo "Upgrading $1..."
+        brew upgrade --cask $1
+    else
+        echo "Installing $1..."
+        brew install --cask $1
+    fi
 }
 
 # Main logic loop

@@ -205,6 +205,13 @@ option5() {
     install_or_upgrade_cask dropbox
     install_or_upgrade_cask chatgpt
 
+    #Dashlane Cli
+    brew install dashlane/tap/dashlane-cli
+
+
+
+
+
     # Browsers
     install_or_upgrade_cask microsoft-edge
     install_or_upgrade_cask google-chrome
@@ -230,7 +237,7 @@ option5() {
     # Recommended Installs from the Mac App Store: (print text out in CYAN)
     echo -e "${CYAN}Recommended Installs from the Mac App Store:${NC}"
     echo -e "${CYAN}---> Jump Desktop\n---> Daisy Disk\n---> Goodnotes\n---> Enchanted LLM\n{NC}"
-    echo -e "${CYAN}---> Parallels\n---> HTML Editor\n---> Actions\n---> UTM LLM\n{NC}"
+    echo -e "${CYAN}---> Parallels\n---> HTML Editor\n---> Actions\n{NC}"
     echo -e "${CYAN}---> Power JSON Editor\n---> Microsoft To Do\n{NC}"
 }
 
@@ -240,6 +247,7 @@ option6() {
 
     # Install or upgrade packages and casks
     install_or_upgrade_cask docker
+    install_or_upgrade_cask ollama
     install_or_upgrade github
 
     # Install node and verify
@@ -251,7 +259,7 @@ option6() {
 
     install_or_upgrade jq
     install_or_upgrade poppler
-    install_or_upgrade_cask ollama
+    
     install_or_upgrade_cask lm-studio
     install_or_upgrade openai-whisper
 
@@ -268,6 +276,9 @@ option6() {
     install_or_upgrade ffmpeg
     install_or_upgrade gnu-sed
     install_or_upgrade wget
+
+    install_or_upgrade_cask utm
+
 
     install_or_upgrade_cask google-cloud-sdk
     gcloud auth login

@@ -5,7 +5,7 @@ import pandas as pd
 import uuid
 import os
 import io
-
+from pathlib import Path
 import asyncio
 import json
 from datetime import datetime, timezone
@@ -59,6 +59,31 @@ class FirestoreStorage:
             secret_payload = os.environ.get(secret_id, '')
         
         return secret_payload
+    
+    async def get_multiple_secrets(self, secret_id_list, project_id='toolsexplorationfirebase',  version_id="latest"):
+        secret_payload_dict = {}
+        # Create the Secret Manager client
+        client = secretmanager.SecretManagerServiceClient()
+
+        for secret_id in secret_id_list:
+            try:
+        
+                # Build the resource name of the secret version
+                name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+
+                # Access the secret version
+                response = client.access_secret_version(request={"name": name})
+
+                # Decode the secret payload and return it
+                secret_payload_value = response.payload.data.decode("UTF-8")
+                secret_payload_dict[secret_id]= secret_payload_value
+                
+            except Exception as e:
+                print(f'ERROR -- Secret ID not found in Secret Manager: {e}')
+                continue
+                
+            
+        return secret_payload_dict
     
     async def get_document_by_id(self, document_id, collection_name=None):
         """
@@ -312,6 +337,7 @@ class FirestoreStorage:
         except Exception as e:
             print(f"Error retrieving or parsing JSON from blob: {e}")
             return None
+    
     async def get_blob(self, file_path):
             """
             Retrieves a blob (file) from Firebase Storage given the full file path.
@@ -360,16 +386,28 @@ class FirestoreStorage:
         except Exception as e:
             print(f"Error downloading blob: {e}")
 
-# Example usage
-# image_url = upload_file("path/to/local/image.jpg", "images/profile_pic.jpg")
+    async def update_local_secret_file(self):
+        env_variable_dict = await self.get_document_by_id('variable_key_list', 'settings')
+        env_variable_list = env_variable_dict.get('names', [])
+        list_of_secret_dicts = await self.get_multiple_secrets(env_variable_list)
+        home_directory_str = str(Path.home())
+        secrets_file_path = f"{home_directory_str}/.config/secrets.sh"    
 
-
-async def test_class(insert_count):
-    fire = FirestoreStorage()
+        with open(secrets_file_path, 'w') as file:
+            file.write("#!/bin/bash")
+            for env_variable in list_of_secret_dicts.keys():
+                file.write(f'\n\nexport {env_variable}="{list_of_secret_dicts.get(env_variable, '')}" \n\n#______________________________________________________________________')
+        
+        
+        
+if __name__ == "__main__":
+    pass
+    # fire = FirestoreStorage()
+    # asyncio.run(fire.update_local_secret_file())
     
-    transcription_name = f"{uuid.uuid4()}"
+    # transcription_name = f"{uuid.uuid4()}"
     
-    await fire.upload_folder_of_json_files_to_cloud_storage("/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes By Michael/Transcriptions/.trans_json", fire.original_transcription_json)
+    # await fire.upload_folder_of_json_files_to_cloud_storage("/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes By Michael/Transcriptions/.trans_json", fire.original_transcription_json)
         
     # for i in range(insert_count):
     #     new_transcriptions = [f"{uuid.uuid4()}",f"{uuid.uuid4()}",f"{uuid.uuid4()}",f"{uuid.uuid4()}"]

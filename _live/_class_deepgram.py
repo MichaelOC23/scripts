@@ -6,11 +6,11 @@ import asyncio
 import socket
 import os
 import pyaudio
+# from _class_firebase import FirestoreStorage
+# notelog = FirestoreStorage()
 from _class_postgres_note_log import NoteLog
-notelog = NoteLog()
 print("Loaded Deepgram Standard Libraries")
-
-print("Beginning Load of DeepGram Library")
+notelog =  NoteLog()
 from deepgram import (
     # Deepgram,
     DeepgramClient,
@@ -28,7 +28,7 @@ print("Completed Load of DeepGram Library")
 is_finals = []
 is_final_speaker_words = []
 is_final_speaker_statements = []
-from _class_postgres_note_log import NoteLog
+# from _class_postgres_note_log import NoteLog
 
 print("Beginning Load of Deepgram Custom Class")
 
@@ -54,7 +54,7 @@ class deepgram_audio_transcription():
         if not os.path.exists(self.download_directory):
             os.mkdir(self.download_directory)
         self.AUDIOINFO_GLOBAL = {}
-
+        self.current_transcription_id = None
 
     async def get_audio_config_dict(self):
         p = pyaudio.PyAudio()
@@ -124,7 +124,7 @@ class deepgram_audio_transcription():
                 try:
                     print("Connection Open")
                 except Exception as e:
-                    print(f"Error in on_open: {e}")
+                        (f"Error in on_open: {e}")
 
             async def on_message(self, result, **kwargs):
                 try:
@@ -143,10 +143,8 @@ class deepgram_audio_transcription():
                             transcription.append(utterance)
                             speaker = result.channel.alternatives[0].words[0].speaker
                             is_final_speaker_statements.append({speaker: utterance} )
-                            notelog.upsert_note(
-                                key=result.metadata.request_id,
-                                word_history=is_final_speaker_words,
-                                statement_history=is_final_speaker_statements)
+                            self.current_transcription_id = result.metadata.request_id
+                            notelog.insert_utterance(result.metadata.request_id, speaker=speaker, utterance=utterance)
                             is_finals = []
                         else:
                             pass
@@ -165,6 +163,7 @@ class deepgram_audio_transcription():
 
             async def on_close(self, close, **kwargs):
                 try:
+                    notelog.insert_note(self.current_transcription_id)
                     print("Connection Closed")
                 except Exception as e:
                     print(f"Error in on_close: {e}")

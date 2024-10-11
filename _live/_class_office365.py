@@ -18,7 +18,7 @@ class office365_tools():
         self.refresh_token = None
         self.expires_in = None
         self.expires_at = datetime.utcnow()
-        self.appkey = os.environ['AZURE_APPKEY']
+        # self.appkey = os.environ['AZURE_APPKEY']
         # self.CLIENT_ID = os.environ.get('AZURE_APP_CLIENT_ID', 'No Key or Connection String found')
         # self.TENANT_ID = os.environ.get('AZURE_APP_TENANT_ID', 'No Key or Connection String found') 
         self.CLIENT_ID = "677433d4-b486-43a5-a8d6-26653ae69bb7"
@@ -34,7 +34,7 @@ class office365_tools():
         self.AUTH_ENDPOINT = f'https://login.microsoftonline.com/{self.TENANT_ID}/oauth2/v2.0/authorize'
         self.TOKEN_ENDPOINT = f'https://login.microsoftonline.com/{self.TENANT_ID}/oauth2/v2.0/token'
         
-        self.app.secret_key = os.urandom(24)
+        # self.app.secret_key = os.urandom(24)
 
     def calculate_expiration(self, expires_in_seconds):
         expiration_time = datetime.now() + timedelta(seconds=expires_in_seconds)

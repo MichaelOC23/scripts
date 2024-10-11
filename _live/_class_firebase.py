@@ -1,0 +1,1 @@
+/Users/michasmi/code/scripts/gcloud/_class_firebase.py
