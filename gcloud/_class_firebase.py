@@ -25,6 +25,7 @@ class FirestoreStorage:
         self.test_dictionary = {'name': 'Jane Doe','email': 'janedoe@example.com','age': 28, "createdon": datetime.now()}
         self.default_collection = default_collection
         self.cred_dict = {}
+        
         if not firebase_admin._apps:
             cred_json = self.access_secret_version("GOOGLE_FIREBASE_ADMIN_JSON_CREDENTIAL_TOOLSEXPLORATION")
             # Parse the JSON string into a dictionary

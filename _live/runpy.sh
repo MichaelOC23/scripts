@@ -9,6 +9,7 @@ fi
 # Path to the Python script
 PYTHON_SCRIPT=$1
 
+# Load environment variables
 source "${HOME}/code/scripts/env_variables.sh"
 
 # Optional parameters for the Python script
@@ -21,10 +22,28 @@ VENV_PATH="${HOME}/code/scripts/scripts_venv"
 # Activate the virtual environment
 source "$VENV_PATH/bin/activate"
 
+# Change directory to the live script folder
 cd "${HOME}/code/scripts/_live"
 
 # Run the Python script with up to two optional parameters using the venv's Python
-"$VENV_PATH/bin/python" "$PYTHON_SCRIPT" "$ARG1" "$ARG2"
+# Capture the Python script's output in a variable
+python_output=$("$VENV_PATH/bin/python" "$PYTHON_SCRIPT" "$ARG1" "$ARG2")
 
 # Deactivate the virtual environment
 deactivate
+
+# Check if the platform is macOS or Linux and copy the output to the clipboard
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: Use pbcopy to copy output to clipboard
+    echo "$python_output" | pbcopy
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux: Use xclip or xsel to copy output to clipboard (install xclip or xsel if not installed)
+    echo "$python_output" | xclip -selection clipboard
+    # Alternatively, for xsel:
+    # echo "$python_output" | xsel --clipboard
+else
+    echo "Clipboard functionality is not supported on this OS."
+fi
+
+# Output the Python script result
+echo "$python_output"
