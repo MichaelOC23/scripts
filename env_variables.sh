@@ -8,9 +8,9 @@ export TEST_AUDIO="\"/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian
 export SCRIPTS_PATH="${HOME}/code/scripts"
 export SCRIPTS_LIVE_PATH="${HOME}/code/scripts/_live"
 
-SCRIPTS_CLASSES_FOLDER_PATH="${HOME}/code/scripts/classes"
+# SCRIPTS_CLASSES_FOLDER_PATH="${HOME}/code/scripts/classes"
 GCLOUD_CLASSES_FOLDER_PATH="${HOME}/code/gcloud/gcloud-classes"
-export PYTHONPATH="${PYTHONPATH}:${PYTHON_CLASSES_FOLDER_PATH}:${GCLOUD_CLASSES_FOLDER_PATH}"
+export PYTHONPATH="${PYTHONPATH}:${GCLOUD_CLASSES_FOLDER_PATH}"
 
 export GOOGLE_CLOUD_FIREBASE_KEY="/Users/michasmi/.config/toolsexplorationfirebase-5f4d4c4c883e.json"
 export COMMUNIFY_HORIZONS_OAUTH_2_CREDENTIAL=$(cat "${HOME}/.config/client_secret_236139179984-damhhom05d0bl3d59qfgnova76eadlbh.apps.googleusercontent.com.json")

@@ -14,7 +14,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>*Transcribe -&gt; Notes</string>
+				<string>Transcribe -&gt; Notes</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>runWorkflowAsService</string>

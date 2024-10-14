@@ -64,20 +64,17 @@
 for f in "$@"
 do
     # Send the file to your transcription service
-    response=$(curl -s -X POST "http://127.0.0.1:5000/transcribeaudiofile" \
+    response=$(curl -s -X POST "http://127.0.0.1:5020/transcribeaudiofile" \
         -F "audiofile=@\"${f}\"" \
         -F "response-format=html" \
         -H "Authorization: Bearer your_correct_api_key")
     
-	osascript &lt;&lt;EOF
-    	tell application "Notes"
-        activate
-        -- Create a new note and store it in a variable
-        set newNote to make new note with properties {name:"Transcription of $(basename "$f")", body:"$response"}
-        
-        -- Open the newly created note
-        show newNote
-    	end tell
+    # Use AppleScript to create a new note in Apple Notes
+    osascript &lt;&lt;EOF
+        tell application "Notes"
+            activate
+            set newNote to make new note with properties {name:"Transcription of $(basename "$f")", body:"$response"}
+        end tell
 EOF
 done</string>
 					<key>CheckedForUserDefaultShell</key>
@@ -194,7 +191,7 @@ done</string>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>309.000000:611.000000</string>
+				<string>309.000000:735.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
