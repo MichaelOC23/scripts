@@ -15,4 +15,5 @@ commit_current_folder() {
         echo -e "${RED}!! ERROR !! Commit was not successful${NC}"
     fi
 }
+mkdir -p "${HOME}/code/scripts/automator" && cp ~/Library/Services/*.workflow "${HOME}/code/scripts/automator/"
 commit_current_folder

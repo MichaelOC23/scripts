@@ -7,13 +7,7 @@ export TEST_AUDIO="\"/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian
 
 export SCRIPTS_PATH="${HOME}/code/scripts"
 export SCRIPTS_LIVE_PATH="${HOME}/code/scripts/_live"
-
-SCRIPTS_CLASSES_FOLDER_PATH="${HOME}/code/scripts/classes"
-GCLOUD_CLASSES_FOLDER_PATH="${HOME}/code/gcloud/gcloud-classes"
-export PYTHONPATH="${PYTHONPATH}:${PYTHON_CLASSES_FOLDER_PATH}:${GCLOUD_CLASSES_FOLDER_PATH}"
-
-export GOOGLE_CLOUD_FIREBASE_KEY="/Users/michasmi/.config/toolsexplorationfirebase-5f4d4c4c883e.json"
-export COMMUNIFY_HORIZONS_OAUTH_2_CREDENTIAL=$(cat "${HOME}/.config/client_secret_236139179984-damhhom05d0bl3d59qfgnova76eadlbh.apps.googleusercontent.com.json")
+PYTHON_CLASSES_FOLDER_PATH="${HOME}/code/scripts/classes"
 
 # PATH export (Standard mac path)
 export PATH="/System/Cryptexes/App/usr/bin:/usr/bin:/bin" # Standard Path
@@ -30,7 +24,7 @@ alias source_env='(source ~/code/scripts/env_variables.sh)'
 alias source_scripts="source /Users/michasmi/code/scripts/scripts_venv/bin/activate "
 alias run_openwebui='docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main'
 alias cd_scripts='cd ${SCRIPTS_PATH}'
-# alias horizon_quart_test="curl -F "file=@${test_audio_file_path}" -H "x-api-key: your_correct_api_key" http://yourserver:4001/uploadfile"
+alias horizon_quart_test="curl -F "file=@${test_audio_file_path}" -H "x-api-key: your_correct_api_key" http://yourserver:4001/uploadfile"
 alias python='python3'
 alias pip='pip3'
 
@@ -67,6 +61,13 @@ export STREAMLIT_RUNNER_MAGICENABLED=false
 export STREAMLIT_RUNNER_FASTRERUNS=true
 export STREAMLIT_RUNNER_ENFORCESERIALIZABLESESSIONSTATE=false
 export STREAMLIT_RUNNER_ENUMCOERCION="nameOnly"
+
+
+
+
+export PYTHONPATH="${PYTHONPATH}:${PYTHON_CLASSES_FOLDER_PATH}"
+export GOOGLE_CLOUD_FIREBASE_KEY="/Users/michasmi/.config/toolsexplorationfirebase-5f4d4c4c883e.json"
+export COMMUNIFY_HORIZONS_OAUTH_2_CREDENTIAL=$(cat "${HOME}/.config/client_secret_236139179984-damhhom05d0bl3d59qfgnova76eadlbh.apps.googleusercontent.com.json")
 
 #Key Folder Locations for python scripts and projects
 export NVM_DIR="/opt/homebrew/Cellar/nvm/0.39.7"
