@@ -20,21 +20,4 @@ export STREAMLIT_PAGE_ICON="https://firebasestorage.googleapis.com/v0/b/toolsexp
 # export STREAMLIT_ICON_URL="https://firebasestorage.googleapis.com/v0/b/toolsexplorationfirebase.appspot.com/o/assets%2Ficon-black-gray.svg?alt=media&token=7ebaedc9-1c3f-45cb-b54f-28741b7067e3"
 # export STREAMLIT_PAGE_ICON="https://firebasestorage.googleapis.com/v0/b/toolsexplorationfirebase.appspot.com/o/assets%2Fpage-icon.svg?alt=media&token=5ecd156a-0371-442f-938e-2f3a3510b344"
 
-#Streamlit
-export STREAMLIT_BROWSER_SERVERADDRESS="localhost"
-export STREAMLIT_BROWSER_GATHERUSAGESTATS=false
-export STREAMLIT_SERVER_FOLDERWATCHBLACKLIST="[]"
-export STREAMLIT_SERVER_HEADLESS=true
-export STREAMLIT_SERVER_RUNONSAVE=true
-export STREAMLIT_SERVER_PORT=5010
-export STREAMLIT_SERVER_ENABLECORS=false
-export STREAMLIT_SERVER_ENABLEXSRFPROTECTION=true
-export STREAMLIT_SERVER_MAX_UPLOAD_SIZE=10000
-export STREAMLIT_SERVER_MAXMESSAGESIZE=10000
-export STREAMLIT_SERVER_ENABLEWEBSOCKETCOMPRESSION=false
-export STREAMLIT_SERVER_ENABLESTATICSERVING=false
 
-export STREAMLIT_RUNNER_MAGICENABLED=false
-export STREAMLIT_RUNNER_FASTRERUNS=true
-export STREAMLIT_RUNNER_ENFORCESERIALIZABLESESSIONSTATE=false
-export STREAMLIT_RUNNER_ENUMCOERCION="nameOnly"

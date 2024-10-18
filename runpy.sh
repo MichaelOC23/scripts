@@ -67,7 +67,7 @@ export STREAMLIT_RUNNER_ENUMCOERCION="nameOnly"
 
 export PYTHONPATH="${PYTHONPATH}:${PYTHON_CLASSES_FOLDER_PATH}"
 export GOOGLE_CLOUD_FIREBASE_KEY="/Users/michasmi/.config/toolsexplorationfirebase-5f4d4c4c883e.json"
-export COMMUNIFY_HORIZONS_OAUTH_2_CREDENTIAL=$(cat "${HOME}/.config/client_secret_236139179984-damhhom05d0bl3d59qfgnova76eadlbh.apps.googleusercontent.com.json")
+
 
 #Key Folder Locations for python scripts and projects
 export NVM_DIR="/opt/homebrew/Cellar/nvm/0.39.7"
