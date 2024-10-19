@@ -2,7 +2,6 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 
 commit_current_folder() {
-    cd "${HOME}/code/scripts"
     echo -e "Committing changes to current repository at: $PWD"
     git pull origin main
     git add .
@@ -16,4 +15,9 @@ commit_current_folder() {
     fi
 }
 mkdir -p "${HOME}/code/scripts/automator" && cp -r ~/Library/Services/*.workflow "${HOME}/code/scripts/automator/"
+
+cd "${HOME}/code/scripts"
+commit_current_folder
+
+cd "${HOME}/code/gcloud"
 commit_current_folder

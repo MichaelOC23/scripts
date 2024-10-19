@@ -24,44 +24,65 @@ cat <<EOL >"$PLIST_FILE"
 <dict>
     <key>Label</key>
     <string>set-ai-env-vars</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/usr/bin/env</string>
-        <string>bash</string>
-        <string>-c</string>
-        <string>
-            export LLM_DATA="\${HOME}/data-llm" &&
-            export OLLAMA_DATA="\${LLM_DATA}/ollama-data" &&
-            export OLLAMA_TEMP="\${LLM_DATA}/temp" &&
-            export OLLAMA_HOME="\${OLLAMA_DATA}" &&
-            export OLLAMA_MODELS="\${OLLAMA_DATA}/models" &&
-            export OLLAMA_CACHE_DIR="\${OLLAMA_DATA}/cache" &&
-            export OLLAMA_TMPDIR="\${OLLAMA_TEMP}" &&
-            export OLLAMA_HOST="0.0.0.0" &&
-            export STREAMLIT_BROWSER_SERVERADDRESS="localhost" &&
-            export STREAMLIT_BROWSER_GATHERUSAGESTATS=false &&
-            export STREAMLIT_SERVER_FOLDERWATCHBLACKLIST="[]" &&
-            export STREAMLIT_SERVER_HEADLESS=true &&
-            export STREAMLIT_SERVER_RUNONSAVE=true &&
-            export STREAMLIT_SERVER_PORT=5010 &&
-            export STREAMLIT_SERVER_ENABLECORS=false &&
-            export STREAMLIT_SERVER_ENABLEXSRFPROTECTION=true &&
-            export STREAMLIT_SERVER_MAX_UPLOAD_SIZE=10000 &&
-            export STREAMLIT_SERVER_MAXMESSAGESIZE=10000 &&
-            export STREAMLIT_SERVER_ENABLEWEBSOCKETCOMPRESSION=false &&
-            export STREAMLIT_SERVER_ENABLESTATICSERVING=false &&
-            export STREAMLIT_RUNNER_MAGICENABLED=false &&
-            export STREAMLIT_RUNNER_FASTRERUNS=true &&
-            export STREAMLIT_RUNNER_ENFORCESERIALIZABLESESSIONSTATE=false &&
-            export STREAMLIT_RUNNER_ENUMCOERCION="nameOnly"
-        </string>
-    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>LLM_DATA</key>
+        <string>/Users/michasmi/data-llm</string>
+        <key>OLLAMA_DATA</key>
+        <string>/Users/michasmi/data-llm/ollama-data</string>
+        <key>OLLAMA_TEMP</key>
+        <string>/Users/michasmi/data-llm/temp</string>
+        <key>OLLAMA_HOME</key>
+        <string>/Users/michasmi/data-llm/ollama-data</string>
+        <key>OLLAMA_MODELS</key>
+        <string>/Users/michasmi/data-llm/ollama-data/models</string>
+        <key>OLLAMA_CACHE_DIR</key>
+        <string>/Users/michasmi/data-llm/ollama-data/cache</string>
+        <key>OLLAMA_TMPDIR</key>
+        <string>/Users/michasmi/data-llm/temp</string>
+        <key>OLLAMA_HOST</key>
+        <string>0.0.0.0</string>
+        <key>STREAMLIT_BROWSER_SERVERADDRESS</key>
+        <string>localhost</string>
+        <key>STREAMLIT_BROWSER_GATHERUSAGESTATS</key>
+        <false/>
+        <key>STREAMLIT_SERVER_FOLDERWATCHBLACKLIST</key>
+        <string>[]</string>
+        <key>STREAMLIT_SERVER_HEADLESS</key>
+        <true/>
+        <key>STREAMLIT_SERVER_RUNONSAVE</key>
+        <true/>
+        <key>STREAMLIT_SERVER_PORT</key>
+        <integer>5010</integer>
+        <key>STREAMLIT_SERVER_ENABLECORS</key>
+        <false/>
+        <key>STREAMLIT_SERVER_ENABLEXSRFPROTECTION</key>
+        <true/>
+        <key>STREAMLIT_SERVER_MAX_UPLOAD_SIZE</key>
+        <integer>10000</integer>
+        <key>STREAMLIT_SERVER_MAXMESSAGESIZE</key>
+        <integer>10000</integer>
+        <key>STREAMLIT_SERVER_ENABLEWEBSOCKETCOMPRESSION</key>
+        <false/>
+        <key>STREAMLIT_SERVER_ENABLESTATICSERVING</key>
+        <false/>
+        <key>STREAMLIT_RUNNER_MAGICENABLED</key>
+        <false/>
+        <key>STREAMLIT_RUNNER_FASTRERUNS</key>
+        <true/>
+        <key>STREAMLIT_RUNNER_ENFORCESERIALIZABLESESSIONSTATE</key>
+        <false/>
+        <key>STREAMLIT_RUNNER_ENUMCOERCION</key>
+        <string>nameOnly</string>
+    </dict>
     <key>RunAtLoad</key>
     <true/>
 </dict>
 </plist>
 EOL
-chmod 644 "$PLIST_FILE"
+
+# Set correct permissions for the plist file
+chmod 600 "$PLIST_FILE"
 
 # Load the plist with launchctl
 launchctl load "$PLIST_FILE"
