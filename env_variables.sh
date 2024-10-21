@@ -44,4 +44,4 @@ export EDITOR="code"
 #Key Folder Locations for python scripts and projects
 export NVM_DIR="/opt/homebrew/Cellar/nvm/0.39.7"
 
-source streamlit_theme.sh
+source env_streamlit_theme.sh

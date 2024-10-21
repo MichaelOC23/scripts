@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Define the plist file path and label (the label used in the plist)
 PLIST_FILE="${HOME}/Library/LaunchAgents/ai-environment.plist"
 LABEL="set-ai-env-vars"

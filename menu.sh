@@ -173,21 +173,13 @@ read_choice() {
         exit 0
         ;;
     12)
-        CONTAINER_NAME="open-webui"
 
-        LLM_DATA="${HOME}/data-llm"
-        OPENWEBUI_DATA="${LLM_DATA}/open-webui-data"
-        OPENWEBUI_PORT_MAPPING="3000:8080"
-        OPENWEBUI_VOLUME_MAPPING="${OPENWEBUI_DATA}:/app/backend/data"
-
-        # IMAGE_NAME="ghcr.io/open-webui/open-webui:main"  # The main image for Open WebUI
-        IMAGE_NAME="ghcr.io/open-webui/open-webui:main"
-
-        # Use --add-host to map host.docker.internal to the host gateway
+        # Fixed Variables
         HOST_OPTION="--add-host=host.docker.internal:host-gateway"
-
+        LLM_DATA="${HOME}/data-llm"
         mkdir -p "${LLM_DATA}"
-        mkdir -p "${OPENWEBUI_DATA}"
+        
+        
 
         install_or_upgrade_cask docker
         install_or_upgrade_cask ollama
@@ -211,9 +203,11 @@ read_choice() {
             docker pull "$IMAGE_NAME"
         }
 
+
         # Function to run the Docker container
-        run_container() {
-            docker run -d -p $OPENWEBUI_PORT_MAPPING \
+        run_container_openwebui() {
+            docker run -d 
+                -p $OPENWEBUI_PORT_MAPPING \
                 $HOST_OPTION \
                 -v $OPENWEBUI_VOLUME_MAPPING \
                 --env OLLAMA_BASE_URL="http://host.docker.internal:11434" \
@@ -221,16 +215,75 @@ read_choice() {
                 --restart always \
                 "$IMAGE_NAME"
         }
+        
+        run_container_pipeline() {
+            docker run -d -p 9099:9099 \
+                $HOST_OPTION \
+                -v ${OPENWEBUI_PIPELINE_DATA}:/app/pipelines \
+                --name $CONTAINER_NAME \
+                --restart always \
+                ghcr.io/open-webui/pipelines:main
+        }
 
-        # Main script execution
-        echo "Checking for an existing container..."
+        run_container_whisper() {
+            docker run -d -p 9099:9099 \
+                $HOST_OPTION \
+                -v $WHISEPER_LLM_DATA/models:/app/models \
+                -v $WHISEPER_LLM_DATA/testdata:/app/testdata \
+                --env MODEL=/app/models/ggml-small.bin \
+                --name "$CONTAINER_NAME" \
+                --restart always \
+                "$IMAGE_NAME" 
+
+        }
+
+
+        
+        
+        
+        
+        # echo -e "BOOOOOOOOOOO"
+        # # Process the main open-webui image
+        # CONTAINER_NAME="open-webui"
+        # IMAGE_NAME="ghcr.io/open-webui/open-webui:main"
+        # OPENWEBUI_PORT_MAPPING="3000:8080"
+        # OPENWEBUI_DATA="${LLM_DATA}/open-webui-data"
+        # mkdir -p "${OPENWEBUI_DATA}"
+        # OPENWEBUI_VOLUME_MAPPING="${OPENWEBUI_DATA}:/app/backend/data"
+        # echo -e "Stopping and removing any existing container..."
+        # stop_and_remove_container
+        # echo -e "Checking for image updates..."
+        # pull_latest_image
+        # echo -e "Starting a new container..."
+        # run_container_openwebui
+
+
+        # CONTAINER_NAME="pipelines"
+        # IMAGE_NAME="ghcr.io/open-webui/pipelines:main"
+        # OPENWEBUI_PIPELINE_DATA="${LLM_DATA}/open-webui-data/pipelines"
+        # mkdir -p "${OPENWEBUI_PIPELINE_DATA}"
+        # echo -e "Stopping and removing any existing PIPELINE container..."
+        # stop_and_remove_container
+        # echo -e "Checking for PIPELINE image updates..."
+        # pull_latest_image
+        # echo -e "Starting a new PIPELINE container..."
+        # run_container_pipeline
+
+        CONTAINER_NAME="whisper-docker"
+        WHISEPER_LLM_DATA="${HOME}/data-llm/whisper"
+        mkdir -p "${WHISEPER_LLM_DATA}"
+        IMAGE_NAME="ghcr.io/appleboy/go-whisper:latest"
+        echo -e "Stopping and removing any existing WHISPER container..."
         stop_and_remove_container
-
-        echo "Checking for image updates..."
+        echo -e "Checking for WHISPER image updates..."
         pull_latest_image
+        echo -e "Starting a new WHISPER container..."
+        run_container_whisper
 
-        echo "Starting a new container..."
-        run_container
+
+
+
+
 
         echo "Container setup complete."
         exit 0
