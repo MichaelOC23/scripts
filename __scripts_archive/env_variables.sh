@@ -27,7 +27,6 @@
 # OLLAMA_DATA="${LLM_DATA}/ollama-data"
 # OLLAMA_TEMP="${LLM_DATA}/temp"
 # mkdir -p "${OLLAMA_TEMP}"
-
 # export OLLAMA_HOME="${OLLAMA_DATA}"
 # # export OLLAMA_LLM_LIBRARY="${OLLAMA_DATA}/library" (N/A for Macs)
 # export OLLAMA_MODELS="${OLLAMA_DATA}/models"

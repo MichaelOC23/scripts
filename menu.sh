@@ -128,7 +128,7 @@ read_choice() {
         exit 0
         ;;
     6)
-        #summarize_and_tag_pdfs
+
         exit 0
         ;;
     7)
@@ -179,8 +179,6 @@ read_choice() {
         LLM_DATA="${HOME}/data-llm"
         mkdir -p "${LLM_DATA}"
         
-        
-
         install_or_upgrade_cask docker
         install_or_upgrade_cask ollama
 
@@ -202,7 +200,6 @@ read_choice() {
             echo "Pulling the latest image: $IMAGE_NAME"
             docker pull "$IMAGE_NAME"
         }
-
 
         # Function to run the Docker container
         run_container_openwebui() {
@@ -237,37 +234,30 @@ read_choice() {
 
         }
 
-
-        
-        
-        
-        
-        # echo -e "BOOOOOOOOOOO"
         # # Process the main open-webui image
-        # CONTAINER_NAME="open-webui"
-        # IMAGE_NAME="ghcr.io/open-webui/open-webui:main"
-        # OPENWEBUI_PORT_MAPPING="3000:8080"
-        # OPENWEBUI_DATA="${LLM_DATA}/open-webui-data"
-        # mkdir -p "${OPENWEBUI_DATA}"
-        # OPENWEBUI_VOLUME_MAPPING="${OPENWEBUI_DATA}:/app/backend/data"
-        # echo -e "Stopping and removing any existing container..."
-        # stop_and_remove_container
-        # echo -e "Checking for image updates..."
-        # pull_latest_image
-        # echo -e "Starting a new container..."
-        # run_container_openwebui
+        CONTAINER_NAME="open-webui"
+        IMAGE_NAME="ghcr.io/open-webui/open-webui:main"
+        OPENWEBUI_PORT_MAPPING="3000:8080"
+        OPENWEBUI_DATA="${LLM_DATA}/open-webui-data"
+        mkdir -p "${OPENWEBUI_DATA}"
+        OPENWEBUI_VOLUME_MAPPING="${OPENWEBUI_DATA}:/app/backend/data"
+        echo -e "Stopping and removing any OPEN-WEBUI container..."
+        stop_and_remove_container
+        echo -e "Checking for image updates..."
+        pull_latest_image
+        echo -e "Starting a new container..."
+        run_container_openwebui
 
-
-        # CONTAINER_NAME="pipelines"
-        # IMAGE_NAME="ghcr.io/open-webui/pipelines:main"
-        # OPENWEBUI_PIPELINE_DATA="${LLM_DATA}/open-webui-data/pipelines"
-        # mkdir -p "${OPENWEBUI_PIPELINE_DATA}"
-        # echo -e "Stopping and removing any existing PIPELINE container..."
-        # stop_and_remove_container
-        # echo -e "Checking for PIPELINE image updates..."
-        # pull_latest_image
-        # echo -e "Starting a new PIPELINE container..."
-        # run_container_pipeline
+        CONTAINER_NAME="pipelines"
+        IMAGE_NAME="ghcr.io/open-webui/pipelines:main"
+        OPENWEBUI_PIPELINE_DATA="${LLM_DATA}/open-webui-data/pipelines"
+        mkdir -p "${OPENWEBUI_PIPELINE_DATA}"
+        echo -e "Stopping and removing any existing PIPELINE container..."
+        stop_and_remove_container
+        echo -e "Checking for PIPELINE image updates..."
+        pull_latest_image
+        echo -e "Starting a new PIPELINE container..."
+        run_container_pipeline
 
         CONTAINER_NAME="whisper-docker"
         WHISEPER_LLM_DATA="${HOME}/data-llm/whisper"
@@ -279,10 +269,6 @@ read_choice() {
         pull_latest_image
         echo -e "Starting a new WHISPER container..."
         run_container_whisper
-
-
-
-
 
 
         echo "Container setup complete."
@@ -394,13 +380,10 @@ find_duplicate_folders() {
 }
 
 update_secrets_google_cloud() {
-    folder_path=$(pwd)
     start_scripts_venv # Start the Python Virtual Environment
     python "${SCRIPT_PATH}/_100_update_secrets.py"
 
 }
-
-_100_update_secrets
 
 # Function to prompt the user and return a value or default to current directory
 get_input_or_default() {

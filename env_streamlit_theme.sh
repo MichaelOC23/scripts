@@ -10,7 +10,7 @@
 # export STREAMLIT_PAGE_ICON="https://firebasestorage.googleapis.com/v0/b/toolsexplorationfirebase.appspot.com/o/assets%2Fpage-icon.svg?alt=media&token=5ecd156a-0371-442f-938e-2f3a3510b344"
 
 #! LIGHT MODE (COMMUNIFY_ISH)
-export STREAMLIT_THEME_BASE="Custom-Light"                # Uset this to set a dark or light standard theme
+export STREAMLIT_THEME_BASE="light"                # Uset this to set a dark or light standard theme
 export STREAMLIT_THEME_FONT="sans serif"                  # Font
 export STREAMLIT_THEME_PRIMARYCOLOR="#FFFFFF"             # Accent
 export STREAMLIT_THEME_BACKGROUNDCOLOR="#003366"          # Main Body Background

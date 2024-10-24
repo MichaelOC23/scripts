@@ -44,6 +44,6 @@ class SecretUpdater:
         
 if __name__ == "__main__":
 
-    fire = SecretUpdater()
-    asyncio.run(fire.update_local_secret_file())
+    secret_updater = SecretUpdater()
+    asyncio.run(secret_updater.update_local_secret_file())
     
