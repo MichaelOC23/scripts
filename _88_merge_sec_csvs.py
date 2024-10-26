@@ -597,7 +597,7 @@ class CSVToPostgres:
             print(f"Error during SQL query execution: {e}")
             return pd.DataFrame()  # Return an empty DataFrame in case of error
 
-    
+
 if __name__ == '__main__':
 
     def main():

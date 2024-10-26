@@ -2,6 +2,7 @@ from google.cloud import firestore
 from google.cloud import secretmanager
 from pathlib import Path
 import asyncio
+import json
 
 
 class SecretUpdater:
@@ -39,7 +40,16 @@ class SecretUpdater:
         with open(secrets_file_path, 'w') as file:
             file.write("#!/bin/bash")
             for env_variable in list_of_secret_dicts.keys():
-                file.write(f'\n\nexport {env_variable}="{list_of_secret_dicts.get(env_variable, '')}" \n\n#______________________________________________________________________')
+                if "FIREBASE" in env_variable:
+                    pass
+                try:
+                    value = json.loads(list_of_secret_dicts.get(env_variable, ''))
+                    value=json.dumps(value).replace('"', '\"')
+                    print(f'exporting {env_variable} as json')
+                except Exception as e:
+                    value = list_of_secret_dicts.get(env_variable, '')
+                    print(f'exporting {env_variable} as string')
+                file.write(f'\n\nexport {env_variable}="{value}" \n\n#______________________________________________________________________')
         
         
 if __name__ == "__main__":

@@ -256,6 +256,7 @@ option6() {
     npm -v
 
     install_or_upgrade_cask visual-studio-code
+    install_or_upgrade supabase/tap/supabase
 
     install_or_upgrade jq
     install_or_upgrade poppler
