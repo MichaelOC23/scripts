@@ -2405,15 +2405,15 @@ class office_365_data():
             print("Error obtaining access token:", token_response.get("error_description"))
             return False
 
-# if st.button('Authenticate to O365'):
-#     o365 = office_365_data()
-#     isauth = o365.is_authenticated_to_o365()
-#     if isauth:
-#         messages  = o365.get_emails()
-#         st.write(messages)
+if st.button('Authenticate to O365'):
+    o365 = office_365_data()
+    isauth = o365.is_authenticated_to_o365()
+    if isauth:
+        messages  = o365.get_emails()
+        st.write(messages)
 
-# # print(office_365_data().get_calendar_events())
-# # print(office_365_data().get_drive_item_id())
+print(office_365_data().get_calendar_events())
+print(office_365_data().get_drive_item_id())
 
 # # print(events)
 

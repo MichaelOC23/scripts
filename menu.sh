@@ -181,6 +181,8 @@ read_choice() {
         
         install_or_upgrade_cask docker
         install_or_upgrade_cask ollama
+        
+        open -a Docker
 
         # Function to stop and remove the container if it exists
         stop_and_remove_container() {
@@ -259,16 +261,16 @@ read_choice() {
         echo -e "Starting a new PIPELINE container..."
         run_container_pipeline
 
-        CONTAINER_NAME="whisper-docker"
-        WHISEPER_LLM_DATA="${HOME}/data-llm/whisper"
-        mkdir -p "${WHISEPER_LLM_DATA}"
-        IMAGE_NAME="ghcr.io/appleboy/go-whisper:latest"
-        echo -e "Stopping and removing any existing WHISPER container..."
-        stop_and_remove_container
-        echo -e "Checking for WHISPER image updates..."
-        pull_latest_image
-        echo -e "Starting a new WHISPER container..."
-        run_container_whisper
+        # CONTAINER_NAME="whisper-docker"
+        # WHISEPER_LLM_DATA="${HOME}/data-llm/whisper"
+        # mkdir -p "${WHISEPER_LLM_DATA}"
+        # IMAGE_NAME="ghcr.io/appleboy/go-whisper:latest"
+        # echo -e "Stopping and removing any existing WHISPER container..."
+        # stop_and_remove_container
+        # echo -e "Checking for WHISPER image updates..."
+        # pull_latest_image
+        # echo -e "Starting a new WHISPER container..."
+        # run_container_whisper
 
 
         echo "Container setup complete."

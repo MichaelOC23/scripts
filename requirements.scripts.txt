@@ -125,6 +125,9 @@ titlecase #For capitalizing text titles
 # reportlab
 # pymupdf
 
+pptx2md
+scipy
+
 
 # #? Image Processing
 pillow
@@ -163,6 +166,7 @@ pyaudio
 sounddevice
 openai-whisper
 
+pyyaml
 
 # #? Apple Development
 # pyobjc

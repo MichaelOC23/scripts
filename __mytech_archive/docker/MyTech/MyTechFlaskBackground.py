@@ -7,7 +7,7 @@ import argparse
 from openai import OpenAI
 
 from openai import chat
-from langchain.retrievers.you import YouRetriever 
+# from langchain.retrievers.you import YouRetriever 
 import asyncio
 
 import re
@@ -46,12 +46,12 @@ import pyaudio
 import subprocess
 import threading
 import queue
-import websocket
+# import websocket
 
 #import urlencode
 
 
-yr = YouRetriever()
+# yr = YouRetriever()
 
 
 # import _class_search_web
@@ -95,8 +95,8 @@ log_directory = "logs"
 if not os.path.exists(log_directory):
     os.makedirs(log_directory)
     
-search = _class_search_web.Search()
-storage = _class_streamlit.PsqlSimpleStorage()
+# search = _class_search_web.Search()
+# storage = _class_streamlit.PsqlSimpleStorage()
 
 def flatten_dict(d, parent_key='', sep='_'):
     items = []
@@ -147,7 +147,7 @@ def searchweb():
     last_name = data.get('last_name', '')
     other = data.get('other', '')
     
-    search.search_web_async_with_assemble(first_name, last_name, other)
+    # search.search_web_async_with_assemble(first_name, last_name, other)
 
 @app.route('/scrape', methods=['POST'])
 def scrape():
@@ -158,15 +158,15 @@ def scrape():
         return jsonify({"error": "Search Query is required"}), 400
 
    
-    search_results = asyncio.run(search.get_stored_search_results(search_query=search_query))
-    resp = asyncio.run(scrape_all_results_async(search_results))
+    # search_results = asyncio.run(search.get_stored_search_results(search_query=search_query))
+    # resp = asyncio.run(scrape_all_results_async(search_results))
     
     return_value = ""
-    if resp is not None:
-        if isinstance(resp, list) or isinstance(resp, dict):
-            return_value = jsonify(resp)
-        else:
-            return_value = resp
+    # if resp is not None:
+    #     if isinstance(resp, list) or isinstance(resp, dict):
+    #         return_value = jsonify(resp)
+    #     else:
+        # return_value = resp
     return return_value
 
 async def get_web_page_async(result):
@@ -182,7 +182,7 @@ async def get_web_page_async(result):
             result['full_text_blob']= body
             result['full_html_blob']=response.text
 
-            resp = await storage.add_update_or_delete_some_entities(storage.url_results_table_name, [result])
+            # resp = await storage.add_update_or_delete_some_entities(storage.url_results_table_name, [result])
             return True
         else:
             print(f"Failed to retrieve {result.get('Orig_RowKey', '')}: Status code {response.status_code}")
@@ -206,9 +206,11 @@ async def scrape_all_results_async(search_results):
 #########################################
 ####      OFFICE 365  FUNCTIONS      ####
 #########################################
-
-CLIENT_ID = os.environ.get('AZURE_APP_CLIENT_ID', 'No Key or Connection String found')
-TENANT_ID = os.environ.get('AZURE_APP_TENANT_ID', 'No Key or Connection String found') 
+CLIENT_ID = "6ece1fbd-8c47-41ff-896f-ecbbee678b83"
+TENANT_ID = "050376de-b1f5-4dbc-8c0f-8929b6e68a08"
+       
+# CLIENT_ID = os.environ.get('AZURE_APP_CLIENT_ID', 'No Key or Connection String found')
+# TENANT_ID = os.environ.get('AZURE_APP_TENANT_ID', 'No Key or Connection String found') 
 
 # OAuth Endpoints
 AUTH_ENDPOINT = f'https://login.microsoftonline.com/{TENANT_ID}/oauth2/v2.0/authorize'
@@ -233,14 +235,16 @@ def homepage():
     code_verifier = generate_code_verifier()
     code_challenge = generate_code_challenge(code_verifier)
     session['code_verifier'] = code_verifier
-    
+    redirect_uri = redirect_uri = 'http://localhost:5000/redirect'
+
     
     
     print(url_for('auth_redirect', _external=True))
     auth_params = {
         'client_id': CLIENT_ID,
         'response_type': 'code',
-        'redirect_uri': url_for('auth_redirect', _external=True),
+        'redirect_uri': redirect_uri,  # Use the explicit localhost URI
+        # 'redirect_uri': url_for('auth_redirect', _external=True),
         'scope': 'openid profile User.Read Mail.Read',
         'response_mode': 'query',
         'code_challenge': code_challenge,
@@ -346,5 +350,8 @@ if __name__ == "__main__":
     # Set the process title
     
     # download_nasdaq()
-    setproctitle.setproctitle("MyTechFlaskBackground")    
-    app.run(port=5005, debug=True)
+    setproctitle.setproctitle("MyTechFlaskBackground")
+    from flask_cors import CORS
+    CORS(app)    
+    # app.secret_key = 'your_secret_key_here'  # Use a secure, randomly generated key
+    # app.run(host="0.0.0.0", port=5000, debug=True)
