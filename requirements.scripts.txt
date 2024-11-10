@@ -110,6 +110,7 @@ matplotlib
 # yfinance
 
 # #? Document & Text Processing
+pymupdf4llm
 pdf2image
 # pdfminer.six
 pytesseract
