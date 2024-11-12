@@ -3,6 +3,12 @@
 
 source "${HOME}/.config/secrets.sh"
 
+# enable homebrew installation
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# updates dashlane
+dcli sync
+
 export TEST_AUDIO="\"/Users/michasmi/Library/Mobile Documents/iCloud~md~obsidian/Documents/_AudioRecordings/20240712 100916-4B0A23BA.m4a\""
 
 export SCRIPTS_PATH="${HOME}/code/scripts"
@@ -43,3 +49,4 @@ export EDITOR="code"
 export NVM_DIR="/opt/homebrew/Cellar/nvm/0.39.7"
 
 source env_streamlit_theme.sh
+source env_start_ollama.sh
