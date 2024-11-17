@@ -14,10 +14,21 @@ class FirestoreStorage:
         self.db = firestore.Client()
         self.test_dictionary = {'name': 'Jane Doe','email': 'janedoe@example.com','age': 28, "createdon": datetime.now()}
         self.default_collection = "original_json_transcription"
+        
+        # Get the path to the service account key JSON file from an environment variable
+        # cred_path = os.environ.get("GOOGLE_CLOUD_FIREBASE_KEY", "Path not Found to credential in Env Variable: GOOGLE_CLOUD_FIREBASE_KEY")
+
+        # Check if the Firebase Admin SDK is already initialized
         if not firebase_admin._apps:
-            cred_path = os.environ.get("GOOGLE_CLOUD_FIREBASE_KEY")
-            self.cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(self.cred, {'storageBucket': 'toolstorage'})
+            cred = credentials.Certificate(os.environ.get("GOOGLE_CLOUD_FIREBASE_KEY", "Path not Found to credential in Env Variable: GOOGLE_CLOUD_FIREBASE_KEY"))
+            firebase_admin.initialize_app(cred, {'storageBucket': 'toolstorage'})
+        
+        
+        
+        # if not firebase_admin._apps:
+        #     # cred_path = os.environ.get("GOOGLE_CLOUD_FIREBASE_KEY")
+        #     self.cred = credentials.Certificate(cred_path)
+        #     firebase_admin.initialize_app(self.cred, {'storageBucket': 'toolstorage'})
         
         #Containers
         self.original_transcription_json = "original_json_transcription"

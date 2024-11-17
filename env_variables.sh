@@ -17,8 +17,15 @@ export SCRIPTS_LIVE_PATH="${HOME}/code/scripts/_live"
 GCLOUD_CLASSES_FOLDER_PATH="${HOME}/code/gcloud/gcloud-classes"
 export PYTHONPATH="${PYTHONPATH}:${GCLOUD_CLASSES_FOLDER_PATH}"
 
-export GOOGLE_CLOUD_FIREBASE_KEY="/Users/michasmi/.config/toolsexplorationfirebase-5f4d4c4c883e.json"
-# export COMMUNIFY_HORIZONS_OAUTH_2_CREDENTIAL=$(cat "${HOME}/.config/client_secret_236139179984-damhhom05d0bl3d59qfgnova76eadlbh.apps.googleusercontent.com.json")
+# Google Cloud Configuration Keys
+export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/.config/google-cloud-toolsexplorationfirebase.json"
+export PROJECT_ID="toolsexplorationfirebase" #For Firebase
+export GCLOUD_PROJECT="toolsexplorationfirebase" #Fort the rest of google cloud
+export FIREBASE_STORAGE_BUCKET="toolsexplorationfirebase.appspot.com"
+export GOOGLE_CLOUD_PROJECT="communify-horizons"
+# export FIREBASE_CONFIG='{"apiKey": "YOUR_API_KEY", "authDomain": "YOUR_PROJECT_ID.firebaseapp.com", "projectId": "YOUR_PROJECT_ID", "storageBucket": "YOUR_PROJECT_ID.appspot.com", "messagingSenderId": "YOUR_MESSAGING_SENDER_ID", "appId": "YOUR_APP_ID"}'
+
+
 
 # PATH export (Standard mac path)
 export PATH="/System/Cryptexes/App/usr/bin:/usr/bin:/bin" # Standard Path
@@ -34,7 +41,7 @@ alias add_spacer="defaults write com.apple.dock persistent-apps -array-add '{\"t
 alias source_env='(source ~/code/scripts/env_variables.sh)'
 alias source_scripts="source /Users/michasmi/code/scripts/scripts_venv/bin/activate "
 alias cd_scripts='cd ${SCRIPTS_PATH}'
-alias horizon_quart_test="curl -F "file=@${test_audio_file_path}" -H "x-api-key: your_correct_api_key" http://yourserver:4001/uploadfile"
+# alias horizon_quart_test="curl -F "file=@${test_audio_file_path}" -H "x-api-key: your_correct_api_key" http://yourserver:4001/uploadfile"
 alias python='python3'
 alias pip='pip3'
 

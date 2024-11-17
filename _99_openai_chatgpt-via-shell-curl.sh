@@ -11,7 +11,7 @@ PROMPT="${1}"
 REQUEST=$(
       cat <<EOF
 {
-  "model": "gpt-4-turbo",
+  "model": "gpt-40-mini",
   "messages": [{"role": "user", "content": "${PROMPT}"}],
   "temperature": 0.1
 }

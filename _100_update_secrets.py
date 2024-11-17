@@ -1,8 +1,10 @@
-from google.cloud import firestore
-from google.cloud import secretmanager
+
+from google.oauth2 import service_account
+from google.cloud import firestore, secretmanager
+# from firebase_admin import credentials
 from pathlib import Path
-import asyncio
-import json
+import os, asyncio, json
+
 
 
 class SecretUpdater:
@@ -10,8 +12,8 @@ class SecretUpdater:
         pass
     
     async def get_multiple_secrets(self, secret_id_list, project_id='toolsexplorationfirebase',  version_id="latest"):
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = f"{Path.home()}/.config/google-cloud-toolsexplorationfirebase.json"
         secret_payload_dict = {}
-        # Create the Secret Manager client
         client = secretmanager.SecretManagerServiceClient()
         for secret_id in secret_id_list:
             try:
@@ -25,7 +27,14 @@ class SecretUpdater:
         return secret_payload_dict
     
     async def get_document_by_id(self, document_id, collection_name=None):
-        db = firestore.Client()
+        credential_file_path = f"{Path.home()}/.config/google-cloud-toolsexplorationfirebase.json"
+        
+        with open (credential_file_path, 'r') as f:
+            try: json.loads (f.read())
+            except Exception as e: print(f"Invalid credential file: {e}")
+        
+        credentials = service_account.Credentials.from_service_account_file(f"{Path.home()}/.config/google-cloud-toolsexplorationfirebase.json")
+        db = firestore.Client(credentials=credentials, project="toolsexplorationfirebase")
         doc_ref = db.collection(collection_name).document(document_id)
         doc = doc_ref.get()
         return doc.to_dict()
@@ -40,8 +49,6 @@ class SecretUpdater:
         with open(secrets_file_path, 'w') as file:
             file.write("#!/bin/bash")
             for env_variable in list_of_secret_dicts.keys():
-                if "FIREBASE" in env_variable:
-                    pass
                 try:
                     value = json.loads(list_of_secret_dicts.get(env_variable, ''))
                     value=json.dumps(value).replace('"', '\"')
