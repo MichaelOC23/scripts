@@ -1,7 +1,6 @@
 
 from google.oauth2 import service_account
 from google.cloud import firestore, secretmanager
-# from firebase_admin import credentials
 from pathlib import Path
 import os, asyncio, json
 
@@ -44,19 +43,31 @@ class SecretUpdater:
         env_variable_list = env_variable_dict.get('names', [])
         list_of_secret_dicts = await self.get_multiple_secrets(env_variable_list)
         home_directory_str = str(Path.home())
-        secrets_file_path = f"{home_directory_str}/.config/secrets.sh"    
+        secrets_file_path = f"{home_directory_str}/.config/secrets.sh"
+        dot_env_file_path = f"{home_directory_str}/.config/.env"    
 
-        with open(secrets_file_path, 'w') as file:
-            file.write("#!/bin/bash")
-            for env_variable in list_of_secret_dicts.keys():
-                try:
-                    value = json.loads(list_of_secret_dicts.get(env_variable, ''))
-                    value=json.dumps(value).replace('"', '\"')
-                    print(f'exporting {env_variable} as json')
-                except Exception as e:
-                    value = list_of_secret_dicts.get(env_variable, '')
-                    print(f'exporting {env_variable} as string')
-                file.write(f'\n\nexport {env_variable}="{value}" \n\n#______________________________________________________________________')
+        with open(secrets_file_path, 'w') as source_script:
+            with open (dot_env_file_path, 'w') as dot_env_file:
+                source_script.write("#!/bin/bash")
+                for env_variable in list_of_secret_dicts.keys():
+                    try:
+                        value = json.loads(list_of_secret_dicts.get(env_variable, ''))
+                        value=json.dumps(value).replace('"', '\"')
+                        print(f'exporting {env_variable} as json')
+                    except Exception as e:
+                        value = list_of_secret_dicts.get(env_variable, '')
+                        print(f'exporting {env_variable} as string')
+                    
+                    source_script.write(f'\nexport {env_variable}="{value}"')
+                    dot_env_file.write(f'\n{env_variable}={value}')
+                dot_env_file.write(f'\n{'STREAMLIT_THEME_PRIMARYCOLOR'}={os.environ.get('STREAMLIT_THEME_PRIMARYCOLOR', '')}')
+                dot_env_file.write(f'\n{'STREAMLIT_THEME_BACKGROUNDCOLOR'}={os.environ.get('STREAMLIT_THEME_BACKGROUNDCOLOR', '')}')
+                dot_env_file.write(f'\n{'STREAMLIT_THEME_SECONDARYBACKGROUNDCOLOR'}={os.environ.get('STREAMLIT_THEME_SECONDARYBACKGROUNDCOLOR', '')}')
+                dot_env_file.write(f'\n{'STREAMLIT_THEME_TEXTCOLOR'}={os.environ.get('STREAMLIT_THEME_TEXTCOLOR', '')}')
+                dot_env_file.write(f'\n{'STREAMLIT_LOGO_URL'}={os.environ.get('STREAMLIT_LOGO_URL', '')}')
+                dot_env_file.write(f'\n{'STREAMLIT_ICON_URL'}={os.environ.get('STREAMLIT_ICON_URL', '')}')
+                dot_env_file.write(f'\n{'STREAMLIT_PAGE_ICON'}={os.environ.get('STREAMLIT_PAGE_ICON', '')}')
+                source_script.write(f'\necho -e "secrets loaded successfully"')
         
         
 if __name__ == "__main__":

@@ -4,5 +4,9 @@
       "path": "."
     }
   ],
-  "settings": {}
+  "settings": {
+    "editor.defaultFoldingRangeProvider": "Continue.continue",
+    "editor.defaultFormatter": "Continue.continue",
+    "notebook.defaultFormatter": "Continue.continue"
+  }
 }

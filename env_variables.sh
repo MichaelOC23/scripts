@@ -21,11 +21,13 @@ export PYTHONPATH="${PYTHONPATH}:${GCLOUD_CLASSES_FOLDER_PATH}"
 export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/.config/google-cloud-toolsexplorationfirebase.json"
 export PROJECT_ID="toolsexplorationfirebase" #For Firebase
 export GCLOUD_PROJECT="toolsexplorationfirebase" #Fort the rest of google cloud
+export GOOGLE_CLOUD_PROJECT="toolsexplorationfirebase" #Fort the rest of google cloud
 export FIREBASE_STORAGE_BUCKET="toolsexplorationfirebase.appspot.com"
-export GOOGLE_CLOUD_PROJECT="communify-horizons"
-# export FIREBASE_CONFIG='{"apiKey": "YOUR_API_KEY", "authDomain": "YOUR_PROJECT_ID.firebaseapp.com", "projectId": "YOUR_PROJECT_ID", "storageBucket": "YOUR_PROJECT_ID.appspot.com", "messagingSenderId": "YOUR_MESSAGING_SENDER_ID", "appId": "YOUR_APP_ID"}'
 
-
+# Preferred Ollama Models
+export OLLAMA_BEST_EMBEDDINGS='mxbai-embed-large'
+export OLLAMA_BEST_LANGUAGE='phi3.5:latest'
+export OLLAMA_BEST_REASONING='llama3.1:8b'
 
 # PATH export (Standard mac path)
 export PATH="/System/Cryptexes/App/usr/bin:/usr/bin:/bin" # Standard Path
@@ -39,15 +41,15 @@ export PATH="${PATH}:${SCRIPTS_LIVE_PATH}:${SCRIPTS_PATH}"
 
 alias add_spacer="defaults write com.apple.dock persistent-apps -array-add '{\"tile-type\"=\"small-spacer-tile\";}' && killall Dock"
 alias source_env='(source ~/code/scripts/env_variables.sh)'
+
+alias run_gcloud_assistant='source /Users/michasmi/code/gcloud/gcloud-assistant/gcloud-assistant_venv/bin/activate && cd /Users/michasmi/code/gcloud/gcloud-assistant && export LOCAL_STREAMLIT_PORT=5012 && streamlit run app.py --server.port "${LOCAL_STREAMLIT_PORT}" && open "http://localhost:${LOCAL_STREAMLIT_PORT}"'
 alias source_scripts="source /Users/michasmi/code/scripts/scripts_venv/bin/activate "
+
+alias cd_gcloud_assistant='cd /Users/michasmi/code/gcloud/gcloud-assistant && source /Users/michasmi/code/gcloud/gcloud-assistant/gcloud-assistant_venv/bin/activate '
 alias cd_scripts='cd ${SCRIPTS_PATH}'
-# alias horizon_quart_test="curl -F "file=@${test_audio_file_path}" -H "x-api-key: your_correct_api_key" http://yourserver:4001/uploadfile"
+
 alias python='python3'
 alias pip='pip3'
-
-#Standardize python commands
-# alias extract_text="source ${HOME}/code/scripts/scripts_venv/bin/activate && python3 ${HOME}/code/scripts/extract_text_from_folder_recursively.py "
-# alias summarize_text="source ${HOME}/code/scripts/scripts_venv/bin/activate && python3 ${HOME}/code/scripts/summarize_recursively.py "
 
 # Set the default editor to Visual Studio Code
 export EDITOR="code"
@@ -57,3 +59,5 @@ export NVM_DIR="/opt/homebrew/Cellar/nvm/0.39.7"
 
 source env_streamlit_theme.sh
 source env_start_ollama.sh
+
+# export STREAMLIT_CUSTOM_THEME="--theme.primaryColor #98CCD0 --theme.backgroundColor  #003366 --theme.secondaryBackgroundColor  #404040 --theme.textColor  #CBD9DF"
