@@ -42,10 +42,10 @@ export PATH="${PATH}:${SCRIPTS_LIVE_PATH}:${SCRIPTS_PATH}"
 alias add_spacer="defaults write com.apple.dock persistent-apps -array-add '{\"tile-type\"=\"small-spacer-tile\";}' && killall Dock"
 alias source_env='(source ~/code/scripts/env_variables.sh)'
 
-alias run_gcloud_assistant='source /Users/michasmi/code/gcloud/gcloud-assistant/gcloud-assistant_venv/bin/activate && cd /Users/michasmi/code/gcloud/gcloud-assistant && export LOCAL_STREAMLIT_PORT=5012 && streamlit run app.py --server.port "${LOCAL_STREAMLIT_PORT}" && open "http://localhost:${LOCAL_STREAMLIT_PORT}"'
+alias run_horizons='source /Users/michasmi/code/horizons/horizons_venv/bin/activate && cd /Users/michasmi/code/horizons && export LOCAL_STREAMLIT_PORT=5012 && streamlit run app.py --server.port "${LOCAL_STREAMLIT_PORT}" && open "http://localhost:${LOCAL_STREAMLIT_PORT}"'
 alias source_scripts="source /Users/michasmi/code/scripts/scripts_venv/bin/activate "
 
-alias cd_gcloud_assistant='cd /Users/michasmi/code/gcloud/gcloud-assistant && source /Users/michasmi/code/gcloud/gcloud-assistant/gcloud-assistant_venv/bin/activate '
+alias cd_horizons='cd /Users/michasmi/code/horizons && source /Users/michasmi/code/horizons/horizons_venv/bin/activate '
 alias cd_scripts='cd ${SCRIPTS_PATH}'
 
 alias python='python3'
