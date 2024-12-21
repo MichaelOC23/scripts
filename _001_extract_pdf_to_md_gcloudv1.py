@@ -1561,7 +1561,7 @@ if __name__ == "__main__":
     pass
 
     fire = FirestoreStorage()
-    test_folder = "/Users/michasmi/Downloads/goldmine2/_attachments/79_340898_9_20231208.pdf"
+    test_folder = "/Users/michasmi/Downloads/Understanding-Todays-US-Investors.pdf"
     # test_folder = "/Users/michasmi/Downloads/goldmine2/_attachments"
     extractor = TextExtractor(test_folder_path=test_folder, force_rerun=True,)
     asyncio.run(extractor.init_extractor())

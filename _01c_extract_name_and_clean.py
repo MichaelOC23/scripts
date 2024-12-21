@@ -889,7 +889,7 @@ class TextExtractor:
     
         
 if __name__ == "__main__":
-    test_folder = "/Users/michasmi/Downloads/rbcreports"
+    test_folder = "/Users/michasmi/Downloads/gh/"
     extractor = TextExtractor(test_folder_path=test_folder, force_rerun=True,)
     asyncio.run(extractor.init_extractor())
          
