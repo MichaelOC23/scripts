@@ -21,3 +21,6 @@ commit_current_folder
 
 cd "${HOME}/code/gcloud"
 commit_current_folder
+
+cd "${HOME}/code/horizons"
+commit_current_folder
